@@ -39,6 +39,7 @@ import com.amazonaws.services.ec2.model.DescribeSecurityGroupsResult;
 import com.amazonaws.services.ec2.model.IpPermission;
 import com.amazonaws.services.ec2.model.RevokeSecurityGroupIngressRequest;
 import com.amazonaws.services.ec2.model.SecurityGroup;
+import com.amazonaws.services.ec2.model.Filter;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.netflix.priam.IConfiguration;
@@ -134,7 +135,18 @@ public class AWSMembership implements IMembership
             client = getEc2Client();
             List<IpPermission> ipPermissions = new ArrayList<IpPermission>();
             ipPermissions.add(new IpPermission().withFromPort(from).withIpProtocol("tcp").withIpRanges(listIPs).withToPort(to));
-            client.authorizeSecurityGroupIngress(new AuthorizeSecurityGroupIngressRequest(config.getACLGroupName(), ipPermissions));
+			AuthorizeSecurityGroupIngressRequest req = new AuthorizeSecurityGroupIngressRequest();
+			if (config.isVpcRing()) {
+				// need to get the GroupId in a VPC
+				DescribeSecurityGroupsRequest req2 = new DescribeSecurityGroupsRequest().withFilters(new Filter("group-name", Arrays.asList(config.getACLGroupName())));
+				DescribeSecurityGroupsResult result = client.describeSecurityGroups(req2);
+				// there should be only one - there could be none
+				req.setGroupId(result.getSecurityGroups().get(0).getGroupId());
+			} else {
+				req.setGroupName(config.getACLGroupName());
+			}
+			req.setIpPermissions(ipPermissions);
+			client.authorizeSecurityGroupIngress(req);
             logger.info("Done adding ACL to: " + StringUtils.join(listIPs, ","));
         }
         finally
@@ -155,7 +167,18 @@ public class AWSMembership implements IMembership
             client = getEc2Client();
             List<IpPermission> ipPermissions = new ArrayList<IpPermission>();
             ipPermissions.add(new IpPermission().withFromPort(from).withIpProtocol("tcp").withIpRanges(listIPs).withToPort(to));
-            client.revokeSecurityGroupIngress(new RevokeSecurityGroupIngressRequest(config.getACLGroupName(), ipPermissions));
+			RevokeSecurityGroupIngressRequest req = new RevokeSecurityGroupIngressRequest();
+			if (config.isVpcRing()) {
+				// need to get the GroupId in a VPC
+				DescribeSecurityGroupsRequest req2 = new DescribeSecurityGroupsRequest().withFilters(new Filter("group-name", Arrays.asList(config.getACLGroupName())));
+				DescribeSecurityGroupsResult result = client.describeSecurityGroups(req2);
+				// there should be only one - there could be none
+				req.setGroupId(result.getSecurityGroups().get(0).getGroupId());
+			} else {
+				req.setGroupName(config.getACLGroupName());
+			}
+			req.setIpPermissions(ipPermissions);
+			client.revokeSecurityGroupIngress(req);
             logger.info("Done removing from ACL: " + StringUtils.join(listIPs, ","));
         }
         finally
@@ -175,7 +198,13 @@ public class AWSMembership implements IMembership
         {
             client = getEc2Client();
             List<String> ipPermissions = new ArrayList<String>();
-            DescribeSecurityGroupsRequest req = new DescribeSecurityGroupsRequest().withGroupNames(Arrays.asList(config.getACLGroupName()));
+			DescribeSecurityGroupsRequest req = new DescribeSecurityGroupsRequest();
+			if (config.isVpcRing()) {
+				// using the Filter would work in both cases
+				req.withFilters(new Filter("group-name", Arrays.asList(config.getACLGroupName())));
+			} else {
+				req.withGroupNames(Arrays.asList(config.getACLGroupName()));
+			}
             DescribeSecurityGroupsResult result = client.describeSecurityGroups(req);
             for (SecurityGroup group : result.getSecurityGroups())
                 for (IpPermission perm : group.getIpPermissions())
