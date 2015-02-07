@@ -2,14 +2,34 @@
 <html lang="en" class="">
 <head></head>
 <body>
-      <p><span>REST</span> <span>API</span> Reference</p>
-<h3>
-<a id="user-content-common-prefix" class="anchor" href="#common-prefix" aria-hidden="true"><span class="octicon octicon-link"></span></a>Common prefix</h3>
+<h3>Linked files</h3>
+<table>
+	<tr>
+		<th>
+<span>file</span> </th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td><a href="priam.log">priam.log</a></td>
+		<td>Priam's log file</td>
+	</tr>
+	<tr>
+		<td><a href="system.log">system.log</a></td>
+		<td>Cassandra's log file</td>
+	</tr>
+	<tr>
+		<td><a href="catalina.out">catalina.out</a></td>
+		<td>Tomcat's log file</td>
+	</tr>
+</table>
+
+<p><span>REST</span> <span>API</span> Reference</p>
+
+<h3>Common prefix</h3>
 <p>It will depend on how you deploy your application.</p>
 <p>In our case, we use it with following prefix: "http://127.0.0.1:8080/Priam/<span>REST</span>"</p>
 <p>E.g. to invoke get_token, which is under "/v1/cassconfig", the call is "http://127.0.0.1:8080/Priam/<span>REST</span>/v1/cassconfig/get_token"</p>
-<h3>
-<a id="user-content-cassandra-config-related" class="anchor" href="#cassandra-config-related" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cassandra Config related</h3>
+<h3>Cassandra Config related</h3>
 <table>
 	<tr>
 		<th>
@@ -38,8 +58,7 @@
 		<td> </td>
 	</tr>
 </table>
-<h3>
-<a id="user-content-cassandra-admin" class="anchor" href="#cassandra-admin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cassandra admin</h3>
+<h3>Cassandra admin</h3>
 <table>
 	<tr>
 		<th>
@@ -58,8 +77,7 @@
 		<td>  </td>
 	</tr>
 </table>
-<h3>
-<a id="user-content-nodetool-commands" class="anchor" href="#nodetool-commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>Nodetool commands</h3>
+<h3>Nodetool commands</h3>
 <table>
 	<tr>
 		<th>
@@ -172,8 +190,7 @@
 <span>KEYSPACES</span>,<span>CFNAMES</span> </td>
 	</tr>
 </table>
-<h3>
-<a id="user-content-backuprestore-related" class="anchor" href="#backuprestore-related" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backup/Restore related</h3>
+<h3>Backup/Restore related</h3>
 <table>
 	<tr>
 		<th>
