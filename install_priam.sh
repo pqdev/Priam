@@ -19,7 +19,7 @@ cp priam-cass-extensions/build/libs/priam-cass-extensions-2.0.10.jar $CASSANDRA_
 sed -i '$aJAVA_AGENT="$JAVA_AGENT -javaagent:$CASSANDRA_HOME/lib/priam-cass-extensions-2.0.10.jar"' $CASSANDRA_HOME/cassandra.in.sh 
 
 # add helper pages to webapp
-aws --region eu-west-1 s3 cp s3://xrs-cassandra/priam.html $TOMCAT_HOME/webapps/ROOT
+cp priam.html $TOMCAT_HOME/webapps/ROOT
 sed -i '1a allowLinking="true" ' $TOMCAT_HOME/webapps/ROOT/META-INF/context.xml
 cd $TOMCAT_HOME/webapps/ROOT 
 ln -s $TOMCAT_HOME/logs/priam.log 

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head></head>
+<body>
+      <p><span>REST</span> <span>API</span> Reference</p>
+<h3>
+<a id="user-content-common-prefix" class="anchor" href="#common-prefix" aria-hidden="true"><span class="octicon octicon-link"></span></a>Common prefix</h3>
+<p>It will depend on how you deploy your application.</p>
+<p>In our case, we use it with following prefix: "http://127.0.0.1:8080/Priam/<span>REST</span>"</p>
+<p>E.g. to invoke get_token, which is under "/v1/cassconfig", the call is "http://127.0.0.1:8080/Priam/<span>REST</span>/v1/cassconfig/get_token"</p>
+<h3>
+<a id="user-content-cassandra-config-related" class="anchor" href="#cassandra-config-related" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cassandra Config related</h3>
+<table>
+	<tr>
+		<th>
+<span>API</span> </th>
+		<th>Description</th>
+		<th>Query params</th>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassconfig/get_seeds ">/v1/cassconfig/get_seeds </a></td>
+		<td>Gets a list of seeds. One per zone/Rack </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassconfig/get_token ">/v1/cassconfig/get_token </a></td>
+		<td>Get token for the node </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassconfig/is_replace_token ">/v1/cassconfig/is_replace_token </a></td>
+		<td>Returns <em>true</em> if this node is replace another node with the same token </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassconfig/double_ring ">/v1/cassconfig/double_ring </a></td>
+		<td>Double the ring </td>
+		<td> </td>
+	</tr>
+</table>
+<h3>
+<a id="user-content-cassandra-admin" class="anchor" href="#cassandra-admin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cassandra admin</h3>
+<table>
+	<tr>
+		<th>
+<span>API</span> </th>
+		<th>Description</th>
+		<th>Query params</th>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/start ">/v1/cassadmin/start </a></td>
+		<td>Starts Cassandra process</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/stop ">/v1/cassadmin/stop </a></td>
+		<td>Stop Cassandra process </td>
+		<td>  </td>
+	</tr>
+</table>
+<h3>
+<a id="user-content-nodetool-commands" class="anchor" href="#nodetool-commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>Nodetool commands</h3>
+<table>
+	<tr>
+		<th>
+<span>API</span> </th>
+		<th>Description</th>
+		<th>Query params</th>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/info ">/v1/cassadmin/info </a></td>
+		<td> Get info (nodetool info) in json format </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/ring/<span>KEYSPACE</span> ">/v1/cassadmin/ring/<span>KEYSPACE</span> </a></td>
+		<td> Get ring (nodetool ring) in json format. </td>
+		<td> Provide a Keyspace parameter </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/flush ">/v1/cassadmin/flush </a></td>
+		<td>flushes all keyspaces </td>
+		<td>   </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/compact ">/v1/cassadmin/compact </a></td>
+		<td> Run compaction </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/cleanup ">/v1/cassadmin/cleanup </a></td>
+		<td> Run cleanup </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/repair ">/v1/cassadmin/repair </a></td>
+		<td> Run repair (nodetool repair) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/refresh?keyspaces= ">/v1/cassadmin/refresh?keyspaces= </a></td>
+		<td> </td>
+		<td>
+<span>KEYSPACES</span>: Comma seperated list of keyspaces </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/version ">/v1/cassadmin/version </a></td>
+		<td> Show release version </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/tpstats ">/v1/cassadmin/tpstats </a></td>
+		<td> Show Thread pool stats </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/compactionstats ">/v1/cassadmin/compactionstats </a></td>
+		<td> Show Compaction stats </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/disablegossip ">/v1/cassadmin/disablegossip </a></td>
+		<td> Disable gossip </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/enablegossip ">/v1/cassadmin/enablegossip </a></td>
+		<td> Enable gossip </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/disablethrift ">/v1/cassadmin/disablethrift </a></td>
+		<td> Disable Thrift </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/enablethrift ">/v1/cassadmin/enablethrift </a></td>
+		<td> Enable Thrift </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/statusthrift ">/v1/cassadmin/statusthrift </a></td>
+		<td> Show Thrift Status </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/gossipinfo ">/v1/cassadmin/gossipinfo </a></td>
+		<td> Show Gossip Info </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/netstats?host= ">/v1/cassadmin/netstats?host= </a></td>
+		<td> Show Net Stats </td>
+		<td>
+<em><span>HOST</span></em> (optional)</td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/move?token= ">/v1/cassadmin/move?token= </a></td>
+		<td> Move </td>
+		<td> Provide New Token </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/scrub?keyspaces=&amp;cfnames= ">/v1/cassadmin/scrub?keyspaces=&amp;cfnames= </a></td>
+		<td> Run Scrub </td>
+		<td>
+<span>KEYSPACES</span>,<acronym title="optional"><span>CFNAMES</span></acronym> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/cassadmin/cfhistograms?keyspaces=&amp;cfnames= ">/v1/cassadmin/cfhistograms?keyspaces=&amp;cfnames= </a></td>
+		<td> Run CF Histogram </td>
+		<td>
+<span>KEYSPACES</span>,<span>CFNAMES</span> </td>
+	</tr>
+</table>
+<h3>
+<a id="user-content-backuprestore-related" class="anchor" href="#backuprestore-related" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backup/Restore related</h3>
+<table>
+	<tr>
+		<th>
+<span>API</span> </th>
+		<th>Description</th>
+		<th>Query params</th>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/do_snapshot ">/v1/backup/do_snapshot </a></td>
+		<td> Runs snapshot backup </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/restore ">/v1/backup/restore </a></td>
+		<td> Restore from last backup up to now </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/restore?daterange=start_,endDate_ ">/v1/backup/restore?daterange=start_,endDate_ </a></td>
+		<td> Restore data between the start and end time </td>
+		<td> Start and End Date("yyyyMMddHHmm"). </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/restore?daterange=start_,endDate_(or default)&amp;region=region_ ">/v1/backup/restore?daterange=start_,endDate_(or default)&amp;region=region_ </a></td>
+		<td> Restore data between the start and end time for specific region </td>
+		<td> start_ and endDate_("yyyyMMddHHmm"). Default day-1.<br>region_ : DC or region. Defaults to current region.<br> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/restore?daterange=start_,endDate_(or default)&amp;token=token_ ">/v1/backup/restore?daterange=start_,endDate_(or default)&amp;token=token_ </a></td>
+		<td> Restore data between the start and end time </td>
+		<td> start_ and endDate_("yyyyMMddHHmm"). Default day-1.<br> Defaults to current region.<br>token_: Override current token.<br> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/restore?daterange=start_,endDate_(or default)&amp;keyspaces=keyspaces_ ">/v1/backup/restore?daterange=start_,endDate_(or default)&amp;keyspaces=keyspaces_ </a></td>
+		<td> Restore data for the specified Keyspaces </td>
+		<td> Provide comma separated list of keyspaces.<br> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/incremental_restore ">/v1/backup/incremental_restore </a></td>
+		<td> Incremental Restore </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/list?daterange=default&amp;filter=filter_ ">/v1/backup/list?daterange=default&amp;filter=filter_ </a></td>
+		<td> Show the list of backup files </td>
+		<td> Date range can be ‘default’ or empty which will select date range between yesterday and today, Valid Filter types are : <span>SNAP</span>, <span>SST</span> &amp; <span>META</span> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/list?daterange=start_,endDate_&amp;filter=filter_ ">/v1/backup/list?daterange=start_,endDate_&amp;filter=filter_ </a></td>
+		<td> Show the list of backup files. </td>
+		<td>Start and end date("yyyyMMddHHmm"), Valid Filter types are : <span>SNAP</span>, <span>SST</span> &amp; <span>META</span> </td>
+	</tr>
+	<tr>
+		<td><a href="/Priam/REST/v1/backup/list ">/v1/backup/list </a></td>
+		<td> Returns a json formatted list of files in the backup </td>
+		<td> </td>
+	</tr>
+</table>
+
+
+  </body>
+</html>
