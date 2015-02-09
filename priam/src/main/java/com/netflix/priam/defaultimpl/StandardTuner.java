@@ -47,8 +47,11 @@ public class StandardTuner implements CassandraTuner
         map.put("rpc_port", config.getThriftPort());
         map.put("start_native_transport", config.isNativeTransportEnabled());
         map.put("native_transport_port", config.getNativeTransportPort());
-        map.put("listen_address", hostname);
-        map.put("rpc_address", hostname);
+		// 'hostname' needs to be private_ip for VPC
+        map.put("listen_address", config.getHostname());
+        map.put("rpc_address", config.getHostname());
+		// broadcast needs to be public_ip for VPC in multi region
+		map.put("broadcast_address", config.getHostIP());
         //Dont bootstrap in restore mode
         if (!Restore.isRestoreEnabled(config)) {
             map.put("auto_bootstrap", config.getAutoBoostrap());
