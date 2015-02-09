@@ -583,7 +583,8 @@ public class PriamConfiguration implements IConfiguration
     @Override
     public String getHostIP()
     {
-        if (this.isVpcRing()) return LOCAL_IP;
+		// vpc in multi region still needs public ip
+        if (this.isVpcRing() && !this.isMultiDC()) return LOCAL_IP;
         else return PUBLIC_IP;
     }
 
