@@ -119,7 +119,14 @@ public class JMXNodeTool extends NodeProbe
         }
         catch (Throwable ex)
         {
-            SystemUtils.closeQuietly(tool);
+			try
+			{
+				SystemUtils.closeQuietly(tool);
+			}
+			catch (Throwable e)
+			{
+				logger.error(e.getMessage(), e);
+			}
             return false;
         }
         return true;
