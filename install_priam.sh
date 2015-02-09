@@ -25,4 +25,5 @@ cd $TOMCAT_HOME/webapps/ROOT
 ln -s $TOMCAT_HOME/logs/priam.log 
 ln -s $TOMCAT_HOME/logs/catalina.out 
 ln -s /var/log/cassandra/system.log 
+ln -s /var/log/cloud-init-output.log
 cd - 
