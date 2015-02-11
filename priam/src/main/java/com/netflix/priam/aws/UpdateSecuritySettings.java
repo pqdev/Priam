@@ -71,8 +71,10 @@ public class UpdateSecuritySettings extends Task
     public void execute()
     {
         // if seed dont execute.
-		// we want to add/delete both the SSL port and the JMX port in the ACL
-        int port = config.getSSLStoragePort();
+		// we want to add/delete both the Storage port and the JMX port in the ACL
+		// if the cluster is using SSL we should add the ssl storage port instead
+        //int port = config.getSSLStoragePort();
+		int port = config.getStoragePort();
         int portJMX = config.getJmxPort();
         List<String> acls = membership.listACL(port, port);
         List<String> aclsJMX = membership.listACL(portJMX, portJMX);
