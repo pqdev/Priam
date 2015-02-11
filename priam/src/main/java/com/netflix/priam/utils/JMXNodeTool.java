@@ -304,12 +304,15 @@ public class JMXNodeTool extends NodeProbe
     }
     public void repair(boolean isSequential, boolean localDataCenterOnly, boolean primaryRange) throws IOException, ExecutionException, InterruptedException
     {
+	//obsolete?
+	/*
         for (String keyspace : getKeyspaces())
             //this.forceKeyspaceRepairPrimaryRange(keyspaceName, isSequential, isLocal, columnFamilies);
             if (primaryRange)
                 forceKeyspaceRepairPrimaryRange(keyspace, isSequential, localDataCenterOnly, new String[0]);
             else
                 forceKeyspaceRepair(keyspace, isSequential, localDataCenterOnly, new String[0]);
+	*/
     }
 
     public void cleanup() throws IOException, ExecutionException, InterruptedException
