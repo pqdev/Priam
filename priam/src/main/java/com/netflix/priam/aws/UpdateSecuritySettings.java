@@ -71,22 +71,32 @@ public class UpdateSecuritySettings extends Task
     public void execute()
     {
         // if seed dont execute.
+		// we want to add/delete both the SSL port and the JMX port in the ACL
         int port = config.getSSLStoragePort();
+        int portJMX = config.getJmxPort();
         List<String> acls = membership.listACL(port, port);
+        List<String> aclsJMX = membership.listACL(portJMX, portJMX);
         List<PriamInstance> instances = factory.getAllIds(config.getAppName());
 
         // iterate to add...
         List<String> add = Lists.newArrayList();
+        List<String> addJMX = Lists.newArrayList();
         for (PriamInstance instance : factory.getAllIds(config.getAppName()))
         {
             String range = instance.getHostIP() + "/32";
             if (!acls.contains(range))
                 add.add(range);
+            if (!aclsJMX.contains(range))
+                addJMX.add(range);
         }
         if (add.size() > 0)
         {
             membership.addACL(add, port, port);
             firstTimeUpdated = true;
+        }
+        if (addJMX.size() > 0)
+        {
+            membership.addACL(addJMX, portJMX, portJMX);
         }
 
         // just iterate to generate ranges.
@@ -99,13 +109,21 @@ public class UpdateSecuritySettings extends Task
 
         // iterate to remove...
         List<String> remove = Lists.newArrayList();
+        List<String> removeJMX = Lists.newArrayList();
         for (String acl : acls)
             if (!currentRanges.contains(acl)) // if not found then remove....
                 remove.add(acl);
+        for (String aclJMX : aclsJMX)
+            if (!currentRanges.contains(aclJMX)) // if not found then remove....
+                removeJMX.add(aclJMX);
         if (remove.size() > 0)
         {
             membership.removeACL(remove, port, port);
             firstTimeUpdated = true;
+        }
+        if (removeJMX.size() > 0)
+        {
+            membership.removeACL(removeJMX, portJMX, portJMX);
         }
     }
 
