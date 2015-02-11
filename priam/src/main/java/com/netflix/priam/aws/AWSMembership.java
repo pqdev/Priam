@@ -147,7 +147,7 @@ public class AWSMembership implements IMembership
 			}
 			req.setIpPermissions(ipPermissions);
 			client.authorizeSecurityGroupIngress(req);
-            logger.info("Done adding ACL to: " + StringUtils.join(listIPs, ","));
+            logger.info("Done adding ACL to: " + StringUtils.join(listIPs, ",") + "ports: " + from + "-" + to);
         }
         finally
         {
