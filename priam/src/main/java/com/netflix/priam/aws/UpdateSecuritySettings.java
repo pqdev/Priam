@@ -84,9 +84,9 @@ public class UpdateSecuritySettings extends Task
         for (PriamInstance instance : factory.getAllIds(config.getAppName()))
         {
             String range = instance.getHostIP() + "/32";
-            if (!acls.contains(range))
+            if (!acls.contains(range) && !add.contains(range))
                 add.add(range);
-            if (!aclsJMX.contains(range))
+            if (!aclsJMX.contains(range) && !addJMX.contains(range))
                 addJMX.add(range);
         }
         if (add.size() > 0)
@@ -111,10 +111,10 @@ public class UpdateSecuritySettings extends Task
         List<String> remove = Lists.newArrayList();
         List<String> removeJMX = Lists.newArrayList();
         for (String acl : acls)
-            if (!currentRanges.contains(acl)) // if not found then remove....
+            if (!currentRanges.contains(acl) && !remove.contains(acl)) // if not found then remove....
                 remove.add(acl);
         for (String aclJMX : aclsJMX)
-            if (!currentRanges.contains(aclJMX)) // if not found then remove....
+            if (!currentRanges.contains(aclJMX) && !removeJMX.contains(aclJMX)) // if not found then remove....
                 removeJMX.add(aclJMX);
         if (remove.size() > 0)
         {
