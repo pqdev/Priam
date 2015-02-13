@@ -71,6 +71,13 @@ public interface IConfiguration
     public String getBackupPrefix();
 
     /**
+     * Bucket region in case of AWS in MultiRegion
+     * 
+     * @return Bucket region used for backups
+     */
+    public String getBackupRegion();
+
+    /**
      * Location containing backup files. Typically bucket name followed by path
      * to the clusters backup
      */

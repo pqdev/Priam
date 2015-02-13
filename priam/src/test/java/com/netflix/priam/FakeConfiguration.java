@@ -56,6 +56,12 @@ public class FakeConfiguration implements IConfiguration
     }
 
     @Override
+    public String getBackupRegion()
+    {
+        return "us-east-1";
+    }
+
+    @Override
     public boolean isCommitLogBackup()
     {
         // TODO Auto-generated method stub

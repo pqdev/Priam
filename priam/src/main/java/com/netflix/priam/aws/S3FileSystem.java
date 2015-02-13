@@ -68,8 +68,8 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
     private static final int MAX_CHUNKS = 10000;
     private static final long UPLOAD_TIMEOUT = (2 * 60 * 60 * 1000L);
     private static final long MAX_BUFFERED_IN_STREAM_SIZE = 5 * 1024 * 1024;
-    	
-    
+
+
     private final Provider<AbstractBackupPath> pathProvider;
     private final ICompression compress;
     private final IConfiguration config;
@@ -116,15 +116,19 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
      */
     private String getS3Endpoint()
     {
-    	 final String curRegion = config.getDC();
-         if("us-east-1".equalsIgnoreCase(curRegion) ||
-            "us-west-1".equalsIgnoreCase(curRegion) ||
-            "us-west-2".equalsIgnoreCase(curRegion)	|| 
-            "eu-west-1".equalsIgnoreCase(curRegion) ||
-            "sa-east-1".equalsIgnoreCase(curRegion))
-             return config.getS3EndPoint();
-         
-         throw new IllegalStateException("Unsupported region for this application: " + curRegion);
+		// S3 endpoint is in the same region in single DC
+		// in multi DC, the S3 bucket should be in a specific backup region
+		final String curRegion = config.getBackupRegion();
+
+		// these are allowed regions for s3
+		if("us-east-1".equalsIgnoreCase(curRegion) ||
+			"us-west-1".equalsIgnoreCase(curRegion) ||
+			"us-west-2".equalsIgnoreCase(curRegion)	|| 
+			"eu-west-1".equalsIgnoreCase(curRegion) ||
+			"sa-east-1".equalsIgnoreCase(curRegion))
+			return config.getS3EndPoint();
+
+        throw new IllegalStateException("Unsupported region for this application: " + curRegion);
     }
 
     @Override

@@ -85,6 +85,7 @@ public class PriamConfiguration implements IConfiguration
     private static final String CONFIG_CL_BK_ENABLE = PRIAM_PRE + ".backup.commitlog.enable";
     private static final String CONFIG_AUTO_RESTORE_SNAPSHOTNAME = PRIAM_PRE + ".restore.snapshot";
     private static final String CONFIG_BUCKET_NAME = PRIAM_PRE + ".s3.bucket";
+    private static final String CONFIG_BUCKET_REGION = PRIAM_PRE + ".s3.region";
     private static final String CONFIG_BACKUP_HOUR = PRIAM_PRE + ".backup.hour";
     private static final String CONFIG_S3_BASE_DIR = PRIAM_PRE + ".s3.base_dir";
     private static final String CONFIG_RESTORE_THREADS = PRIAM_PRE + ".restore.threads";
@@ -170,6 +171,7 @@ public class PriamConfiguration implements IConfiguration
     private final String DEFAULT_CASS_STOP_SCRIPT = "/etc/init.d/cassandra stop";
     private final String DEFAULT_BACKUP_LOCATION = "backup";
     private final String DEFAULT_BUCKET_NAME = "cassandra-archive";
+    private final String DEFAULT_BUCKET_REGION = "us-east-1";
 //    private String DEFAULT_AVAILABILITY_ZONES = "";
     private List<String> DEFAULT_AVAILABILITY_ZONES = ImmutableList.of();
     private final String DEFAULT_CASS_PROCESS_NAME = "CassandraDaemon";
@@ -366,6 +368,16 @@ public class PriamConfiguration implements IConfiguration
     public String getBackupPrefix()
     {
         return config.get(CONFIG_BUCKET_NAME, DEFAULT_BUCKET_NAME);
+    }
+
+    @Override
+    public String getBackupRegion()
+    {
+		// if not specified, the backup region should be the current region
+		if (isMultiDC())
+			return config.get(CONFIG_BUCKET_REGION, DEFAULT_BUCKET_REGION);
+		else
+			return getDC();
     }
 
     @Override
@@ -820,10 +832,11 @@ public class PriamConfiguration implements IConfiguration
         return config.get(CONFIG_NATIVE_PROTOCOL_ENABLED, false);
     }
     
-    
     public String getS3EndPoint() {
-    	String region = getDC();
-    	
+		// by default get the endpoint for the current region
+		// but the region should be over ridden in a multi data center setting
+    	String region = getBackupRegion();
+
     	String s3Url = null;
     	
     	if (US_EAST_1_REGION.equals(region))
