@@ -217,6 +217,11 @@ public interface IConfiguration
     public boolean isMultiDC();
 
     /**
+     * @return desired number of vnodes
+     */
+    public int getNumTokens();
+
+    /**
      * @return Number of backup threads for uploading
      */
     public int getMaxBackupUploadThreads();
