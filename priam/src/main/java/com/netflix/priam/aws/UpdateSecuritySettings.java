@@ -93,7 +93,7 @@ public class UpdateSecuritySettings extends Task
                 add.add(range);
             if (!aclsJMX.contains(range) && !addJMX.contains(range))
                 addJMX.add(range);
-            if (!aclsOpsCtr.contains(range) && !addJMX.contains(range))
+            if (!aclsOpsCtr.contains(range) && !addOpsCtr.contains(range))
                 addOpsCtr.add(range);
         }
         if (add.size() > 0)
