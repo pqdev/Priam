@@ -75,13 +75,37 @@ public class SystemUtils
      */
     public static void cleanupDir(String dirPath, List<String> childdirs) throws IOException
     {
-        if (childdirs == null || childdirs.size() == 0)
+      if (childdirs == null || childdirs.size() == 0) {
+        // this sucks on an NFS mount so we poke it a bit
+        int tries = 0;
+        boolean unsuccessful = true;
+
+        while (tries < 5 && unsuccessful) {
+          try {
             FileUtils.cleanDirectory(new File(dirPath));
-        else
-        {
-            for (String cdir : childdirs)
-                FileUtils.cleanDirectory(new File(dirPath + "/" + cdir));
+            unsuccessful = false;
+          } catch (IOException e) {
+            tries++;
+            logger.info("stupid nfs");
+          }
         }
+      } else {
+        for (String cdir : childdirs) {
+          // still sucks on NFS
+          int tries = 0;
+          boolean unsuccessful = true;
+
+          while (tries < 5 && unsuccessful) {
+            try {
+              FileUtils.cleanDirectory(new File(dirPath + "/" + cdir));
+              unsuccessful = false;
+            } catch (IOException e) {
+              tries++;
+              logger.info("stupid nfs");
+            }
+          }
+        }
+      }
     }
 
     public static void createDirs(String location)
