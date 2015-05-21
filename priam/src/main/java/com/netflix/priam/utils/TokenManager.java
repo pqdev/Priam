@@ -27,7 +27,7 @@ public class TokenManager implements ITokenManager
     // The default murmur 3 partitioner expects a token range of -2^63 to 2^63
     // The older random partitioner expects a range of 0 to 2^127
     public static final BigInteger MAXIMUM_TOKEN = new BigInteger("2").pow(63);
-    public static final BigInteger MINIMUM_TOKEN = -MAXIMUM_TOKEN;
+    public static final BigInteger MINIMUM_TOKEN = MAXIMUM_TOKEN.negate();
 
     /**
      * Calculate a token for the given position, evenly spaced from other size-1 nodes.  See
