@@ -98,8 +98,8 @@ public class UpdateSecuritySettings extends Task
                 addJMX.add(range);
             if (!aclsOpsCtr.contains(range) && !addOpsCtr.contains(range))
                 addOpsCtr.add(range);
-            if (!aclsNativeTransport.contains(range) && !aclsNativeTransport.contains(range))
-                aclsNativeTransport.add(range);
+            if (!aclsNativeTransport.contains(range) && !addNativeTransport.contains(range))
+                addNativeTransport.add(range);
         }
         if (add.size() > 0)
         {
