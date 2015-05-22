@@ -76,15 +76,18 @@ public class UpdateSecuritySettings extends Task
         //int port = config.getSSLStoragePort();
 	int port = config.getStoragePort();
         int portJMX = config.getJmxPort();
+        int portNativeTransport = config.getNativeTransportPort();
         int portOpsCtr = 61620;
         List<String> acls = membership.listACL(port, port);
         List<String> aclsJMX = membership.listACL(portJMX, portJMX);
+        List<String> aclsNativeTransport = membership.listACL(portNativeTransport, portNativeTransport);
         List<String> aclsOpsCtr = membership.listACL(portOpsCtr, portOpsCtr);
         List<PriamInstance> instances = factory.getAllIds(config.getAppName());
 
         // iterate to add...
         List<String> add = Lists.newArrayList();
         List<String> addJMX = Lists.newArrayList();
+        List<String> addNativeTransport = Lists.newArrayList();
         List<String> addOpsCtr = Lists.newArrayList();
         for (PriamInstance instance : factory.getAllIds(config.getAppName()))
         {
@@ -95,6 +98,8 @@ public class UpdateSecuritySettings extends Task
                 addJMX.add(range);
             if (!aclsOpsCtr.contains(range) && !addOpsCtr.contains(range))
                 addOpsCtr.add(range);
+            if (!aclsNativeTransport.contains(range) && !aclsNativeTransport.contains(range))
+                aclsNativeTransport.add(range);
         }
         if (add.size() > 0)
         {
@@ -109,6 +114,10 @@ public class UpdateSecuritySettings extends Task
         {
             membership.addACL(addOpsCtr, portOpsCtr, portOpsCtr);
         }
+        if (addNativeTransport.size() > 0)
+        {
+            membership.addACL(addNativeTransport, portNativeTransport, portNativeTransport);
+        }
 
         // just iterate to generate ranges.
         List<String> currentRanges = Lists.newArrayList();
@@ -122,6 +131,7 @@ public class UpdateSecuritySettings extends Task
         List<String> remove = Lists.newArrayList();
         List<String> removeJMX = Lists.newArrayList();
         List<String> removeOpsCtr = Lists.newArrayList();
+        List<String> removeNativeTransport = Lists.newArrayList();
         for (String acl : acls)
             if (!currentRanges.contains(acl) && !remove.contains(acl)) // if not found then remove....
                 remove.add(acl);
@@ -131,6 +141,9 @@ public class UpdateSecuritySettings extends Task
         for (String aclOpsCtr : aclsOpsCtr)
             if (!currentRanges.contains(aclOpsCtr) && !removeOpsCtr.contains(aclOpsCtr)) // if not found then remove....
                 removeOpsCtr.add(aclOpsCtr);
+        for (String aclNativeTransport : aclsNativeTransport)
+            if (!currentRanges.contains(aclNativeTransport) && !removeNativeTransport.contains(aclNativeTransport)) // if not found then remove....
+                removeNativeTransport.add(aclNativeTransport);
 
         if (remove.size() > 0)
         {
@@ -144,6 +157,10 @@ public class UpdateSecuritySettings extends Task
         if (removeOpsCtr.size() > 0)
         {
             membership.removeACL(removeOpsCtr, portOpsCtr, portOpsCtr);
+        }
+        if (removeNativeTransport.size() > 0)
+        {
+            membership.removeACL(removeNativeTransport, portNativeTransport, portNativeTransport);
         }
 
     }
