@@ -569,4 +569,8 @@ public class FakeConfiguration implements IConfiguration
         // TODO Auto-generated method stub
         return false;
     }
+    
+    public String getOpscenterHostIp() {
+    	return "";
+    }
 }
