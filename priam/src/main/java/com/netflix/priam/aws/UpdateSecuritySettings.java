@@ -74,7 +74,7 @@ public class UpdateSecuritySettings extends Task
 		// we want to add/delete both the Storage port and the JMX port in the ACL
 		// if the cluster is using SSL we should add the ssl storage port instead
         //int port = config.getSSLStoragePort();
-	int port = config.getStoragePort();
+    	int port = config.getStoragePort();
         int portJMX = config.getJmxPort();
         int portNativeTransport = config.getNativeTransportPort();
         int portOpsCtr = 61620;
@@ -101,6 +101,8 @@ public class UpdateSecuritySettings extends Task
             if (!aclsNativeTransport.contains(range) && !addNativeTransport.contains(range))
                 addNativeTransport.add(range);
         }
+            
+        
         if (add.size() > 0)
         {
             membership.addACL(add, port, port);
@@ -126,6 +128,12 @@ public class UpdateSecuritySettings extends Task
             String range = instance.getHostIP() + "/32";
             currentRanges.add(range);
         }
+        
+        // add opscenter host to current range to prevent security group cleanup
+        currentRanges.add(config.getOpsCenterHostIp() + "/32");
+
+        // add local cidr ranges to prevent security group cleanup
+        currentRanges.addAll(config.getLocalCidrRanges());
 
         // iterate to remove...
         List<String> remove = Lists.newArrayList();

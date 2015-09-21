@@ -435,4 +435,7 @@ public interface IConfiguration
     
     //if using with Datastax Enterprise
     public String getDseClusterType();
+    
+    public String getOpsCenterHostIp();
+    public List<String> getLocalCidrRanges();
 }

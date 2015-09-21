@@ -15,6 +15,7 @@
  */
 package com.netflix.priam.defaultimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.services.ec2.AmazonEC2;
@@ -132,6 +133,9 @@ public class PriamConfiguration implements IConfiguration
     private static final String CONFIG_EU_WEST_1_S3_ENDPOINT = PRIAM_PRE + ".euwest1.s3url";
     private static final String CONFIG_SA_EAST_1_S3_ENDPOINT = PRIAM_PRE + ".saeast1.s3url";
     
+    private static final String CONFIG_OPSCENTER_HOST_IP = PRIAM_PRE + ".opscenter.host.ip";
+    private static final String CONFIG_LOCAL_CIDR_RANGES = PRIAM_PRE + ".local.cidr.ranges";
+    
     private static String US_EAST_1_REGION = "us-east-1";
     private static String US_WEST_1_REGION = "us-west-1";
     private static String US_WEST_2_REGION = "us-west-2";
@@ -205,6 +209,9 @@ public class PriamConfiguration implements IConfiguration
     private static final String DEFAULT_US_WEST_2_S3_ENDPOINT = "s3-us-west-2.amazonaws.com";
     private static final String DEFAULT_EU_WEST_1_S3_ENDPOINT = "s3-eu-west-1.amazonaws.com";
     private static final String DEFAULT_SA_EAST_1_S3_ENDPOINT = "s3-sa-east-1.amazonaws.com";
+    
+    private static final String DEFAULT_OPSCENTER_HOST_IP = "127.0.0.1";
+    private static final String DEFAULT_LOCAL_CIDR_RANGES = "";
     
    
     private final IConfigSource config; 
@@ -913,4 +920,21 @@ public class PriamConfiguration implements IConfiguration
     public String getDseClusterType() { 
         return config.get(CONFIG_DSE_CLUSTER_TYPE + "." + ASG_NAME, "cassandra");
     }
+
+	@Override
+	public String getOpsCenterHostIp() {
+		return config.get(CONFIG_OPSCENTER_HOST_IP, DEFAULT_OPSCENTER_HOST_IP);
+	}
+
+	@Override
+	public List<String> getLocalCidrRanges() {
+		List<String> list = new ArrayList<String>();
+		String[] ranges = config.get(CONFIG_LOCAL_CIDR_RANGES, DEFAULT_LOCAL_CIDR_RANGES).split(",");
+		
+		for (String range: ranges) {
+			list.add(range);
+		}
+		
+		return list;
+	}
 }

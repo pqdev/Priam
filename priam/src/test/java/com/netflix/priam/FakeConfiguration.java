@@ -1,5 +1,6 @@
 package com.netflix.priam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -581,4 +582,14 @@ public class FakeConfiguration implements IConfiguration
         // TODO Auto-generated method stub
         return "cassandra";
     }
+
+	@Override
+	public String getOpsCenterHostIp() {
+		return "";
+	}
+
+	@Override
+	public List<String> getLocalCidrRanges() {
+		return new ArrayList<String>();
+	}
 }
