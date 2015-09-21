@@ -152,6 +152,7 @@ public class PriamConfiguration implements IConfiguration
     private static final String CONFIG_VPC_RING = PRIAM_PRE + ".vpc";
     
     private static final String CONFIG_OPSCENTER_HOST_IP = PRIAM_PRE + ".opscenter.host.ip";
+    private static final String CONFIG_LOCAL_CIDR_RANGES = PRIAM_PRE + ".local.cidr.ranges";
 
 
     // Defaults 
@@ -197,6 +198,7 @@ public class PriamConfiguration implements IConfiguration
     private static final int DEFAULT_INDEX_INTERVAL = 256;
     
     private static final String DEFAULT_OPSCENTER_HOST_IP = "127.0.0.1";
+    private static final String DEFAULT_LOCAL_CIDR_RANGES = "127.0.0.1/32";
     
     
     //default S3 endpoints
@@ -898,5 +900,9 @@ public class PriamConfiguration implements IConfiguration
     
     public String getOpscenterHostIp() {
     	return config.get(CONFIG_OPSCENTER_HOST_IP, DEFAULT_OPSCENTER_HOST_IP);
+    }
+    
+    public String[] getLocalCidrRanges() {
+    	return config.get(CONFIG_LOCAL_CIDR_RANGES, DEFAULT_LOCAL_CIDR_RANGES).split(",");
     }
 }
