@@ -150,8 +150,6 @@ public class PriamConfiguration implements IConfiguration
     private static String ASG_NAME = System.getenv("ASG_NAME");
     private static String REGION = System.getenv("EC2_REGION");
     private static final String CONFIG_VPC_RING = PRIAM_PRE + ".vpc";
-    
-    private static final String CONFIG_OPSCENTER_HOST_IP = PRIAM_PRE + ".opscenter.host.ip";
 
 
     // Defaults 
@@ -195,8 +193,6 @@ public class PriamConfiguration implements IConfiguration
     
     private static final String DEFAULT_RPC_SERVER_TYPE = "hsha";
     private static final int DEFAULT_INDEX_INTERVAL = 256;
-    
-    private static final String DEFAULT_OPSCENTER_HOST_IP = "127.0.0.1";
     
     
     //default S3 endpoints
@@ -894,9 +890,5 @@ public class PriamConfiguration implements IConfiguration
     
     public boolean getAutoBoostrap() {
         return config.get(CONFIG_AUTO_BOOTSTRAP, true);
-    }
-    
-    public String getOpscenterHostIp() {
-    	return config.get(CONFIG_OPSCENTER_HOST_IP, DEFAULT_OPSCENTER_HOST_IP);
     }
 }

@@ -421,6 +421,4 @@ public interface IConfiguration
     
     public boolean getAutoBoostrap();
     
-    public String getOpscenterHostIp();
-    
 }

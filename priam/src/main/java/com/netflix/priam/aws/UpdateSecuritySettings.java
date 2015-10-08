@@ -96,11 +96,6 @@ public class UpdateSecuritySettings extends Task
             String range = instance.getHostIP() + "/32";
             currentRanges.add(range);
         }
-        
-        // exclude opscenter host from ACL cleanup
-        // add host ip to current range list to prevent removal        
-        String range = config.getOpscenterHostIp() + "/32";
-        currentRanges.add(range);
 
         // iterate to remove...
         List<String> remove = Lists.newArrayList();
