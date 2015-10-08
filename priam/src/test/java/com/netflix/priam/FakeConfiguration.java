@@ -573,9 +573,4 @@ public class FakeConfiguration implements IConfiguration
     public String getOpscenterHostIp() {
     	return "";
     }
-
-	@Override
-	public String[] getLocalCidrRanges() {
-		return new String[0];
-	}
 }

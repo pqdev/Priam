@@ -423,6 +423,4 @@ public interface IConfiguration
     
     public String getOpscenterHostIp();
     
-    public String[] getLocalCidrRanges();
-    
 }
