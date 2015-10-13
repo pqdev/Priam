@@ -25,6 +25,8 @@ sed -i 's/<Context>/<Context allowLinking="true">/' $CATALINA_CONF/context.xml
 mkdir -m 777 $TOMCAT_HOME/webapps/ROOT/
 cp priam.html $TOMCAT_HOME/webapps/ROOT/
 cd $TOMCAT_HOME/webapps/ROOT/
+chmod 755 /var/log/tomcat7/
+chmod 644 /var/log/tomcat7/*
 ln -s /var/log/tomcat7/priam.log
 ln -s /var/log/tomcat7/catalina.out
 ln -s /var/log/cassandra/system.log
