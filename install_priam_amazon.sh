@@ -30,5 +30,8 @@ chmod 644 /var/log/tomcat7/*
 ln -s /var/log/tomcat7/priam.log
 ln -s /var/log/tomcat7/catalina.out
 ln -s /var/log/cassandra/system.log
+ln -s /var/log/cassandra/cassandra.log
+ln -s /var/log/datastax-agent/agent.log
+ln -s /var/log/datastax-agent/startup.log
 ln -s /var/log/cloud-init-output.log
 cd -
