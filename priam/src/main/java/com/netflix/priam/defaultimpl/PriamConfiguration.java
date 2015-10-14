@@ -411,6 +411,14 @@ public class PriamConfiguration implements IConfiguration
         return config.getList(CONFIG_RESTORE_KEYSPACES);
     }
 
+
+    public ArrayList getDataFileLocations()
+    {
+        String value = config.get(CONFIG_DATA_LOCATION, DEFAULT_DATA_LOCATION);
+	return new ArrayList(Arrays.asList(value.split(',')));
+    }
+
+
     @Override
     public String getDataFileLocation()
     {
