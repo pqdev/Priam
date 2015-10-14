@@ -18,6 +18,7 @@ package com.netflix.priam;
 import com.google.inject.ImplementedBy;
 import com.netflix.priam.defaultimpl.PriamConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
