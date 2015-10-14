@@ -101,6 +101,11 @@ public interface IConfiguration
     public String getDataFileLocation();
 
     /**
+     * @return Locations of the local data dirs
+     */
+    public ArrayList getDataFileLocations();
+
+    /**
      * @return Location of local cache
      */
     public String getCacheLocation();
