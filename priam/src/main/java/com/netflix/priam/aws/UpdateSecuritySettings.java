@@ -71,35 +71,37 @@ public class UpdateSecuritySettings extends Task
     public void execute()
     {
         // if seed dont execute.
-		// we want to add/delete both the Storage port and the JMX port in the ACL
-		// if the cluster is using SSL we should add the ssl storage port instead
+	// we want to add/delete both the Storage port and the JMX port in the ACL
+	// if the cluster is using SSL we should add the ssl storage port instead
         //int port = config.getSSLStoragePort();
     	int port = config.getStoragePort();
-        int portJMX = config.getJmxPort();
-        int portNativeTransport = config.getNativeTransportPort();
+        
+        // we now have too many instances, and need to compress all the rules into a single one
+        //int portJMX = config.getJmxPort();
+        //int portNativeTransport = config.getNativeTransportPort();
         int portOpsCtr = 61620;
-        List<String> acls = membership.listACL(port, port);
-        List<String> aclsJMX = membership.listACL(portJMX, portJMX);
-        List<String> aclsNativeTransport = membership.listACL(portNativeTransport, portNativeTransport);
-        List<String> aclsOpsCtr = membership.listACL(portOpsCtr, portOpsCtr);
+        List<String> acls = membership.listACL(port, portOptCtr);
+        //List<String> aclsJMX = membership.listACL(portJMX, portJMX);
+        //List<String> aclsNativeTransport = membership.listACL(portNativeTransport, portNativeTransport);
+        //List<String> aclsOpsCtr = membership.listACL(portOpsCtr, portOpsCtr);
         List<PriamInstance> instances = factory.getAllIds(config.getAppName());
 
         // iterate to add...
         List<String> add = Lists.newArrayList();
-        List<String> addJMX = Lists.newArrayList();
-        List<String> addNativeTransport = Lists.newArrayList();
-        List<String> addOpsCtr = Lists.newArrayList();
+        //List<String> addJMX = Lists.newArrayList();
+        //List<String> addNativeTransport = Lists.newArrayList();
+        //List<String> addOpsCtr = Lists.newArrayList();
         for (PriamInstance instance : factory.getAllIds(config.getAppName()))
         {
             String range = instance.getHostIP() + "/32";
             if (!acls.contains(range) && !add.contains(range))
                 add.add(range);
-            if (!aclsJMX.contains(range) && !addJMX.contains(range))
-                addJMX.add(range);
-            if (!aclsOpsCtr.contains(range) && !addOpsCtr.contains(range))
-                addOpsCtr.add(range);
-            if (!aclsNativeTransport.contains(range) && !addNativeTransport.contains(range))
-                addNativeTransport.add(range);
+            //if (!aclsJMX.contains(range) && !addJMX.contains(range))
+            //    addJMX.add(range);
+            //if (!aclsOpsCtr.contains(range) && !addOpsCtr.contains(range))
+            //    addOpsCtr.add(range);
+            //if (!aclsNativeTransport.contains(range) && !addNativeTransport.contains(range))
+            //    addNativeTransport.add(range);
         }
             
         
@@ -108,18 +110,18 @@ public class UpdateSecuritySettings extends Task
             membership.addACL(add, port, port);
             firstTimeUpdated = true;
         }
-        if (addJMX.size() > 0)
-        {
-            membership.addACL(addJMX, portJMX, portJMX);
-        }
-        if (addOpsCtr.size() > 0)
-        {
-            membership.addACL(addOpsCtr, portOpsCtr, portOpsCtr);
-        }
-        if (addNativeTransport.size() > 0)
-        {
-            membership.addACL(addNativeTransport, portNativeTransport, portNativeTransport);
-        }
+        //if (addJMX.size() > 0)
+        //{
+        //    membership.addACL(addJMX, portJMX, portJMX);
+        //}
+        //if (addOpsCtr.size() > 0)
+        //{
+        //    membership.addACL(addOpsCtr, portOpsCtr, portOpsCtr);
+        //}
+        //if (addNativeTransport.size() > 0)
+        //{
+        //    membership.addACL(addNativeTransport, portNativeTransport, portNativeTransport);
+        //}
 
         // just iterate to generate ranges.
         List<String> currentRanges = Lists.newArrayList();
@@ -137,39 +139,39 @@ public class UpdateSecuritySettings extends Task
 
         // iterate to remove...
         List<String> remove = Lists.newArrayList();
-        List<String> removeJMX = Lists.newArrayList();
-        List<String> removeOpsCtr = Lists.newArrayList();
-        List<String> removeNativeTransport = Lists.newArrayList();
+        //List<String> removeJMX = Lists.newArrayList();
+        //List<String> removeOpsCtr = Lists.newArrayList();
+        //List<String> removeNativeTransport = Lists.newArrayList();
         for (String acl : acls)
             if (!currentRanges.contains(acl) && !remove.contains(acl)) // if not found then remove....
                 remove.add(acl);
-        for (String aclJMX : aclsJMX)
-            if (!currentRanges.contains(aclJMX) && !removeJMX.contains(aclJMX)) // if not found then remove....
-                removeJMX.add(aclJMX);
-        for (String aclOpsCtr : aclsOpsCtr)
-            if (!currentRanges.contains(aclOpsCtr) && !removeOpsCtr.contains(aclOpsCtr)) // if not found then remove....
-                removeOpsCtr.add(aclOpsCtr);
-        for (String aclNativeTransport : aclsNativeTransport)
-            if (!currentRanges.contains(aclNativeTransport) && !removeNativeTransport.contains(aclNativeTransport)) // if not found then remove....
-                removeNativeTransport.add(aclNativeTransport);
+        //for (String aclJMX : aclsJMX)
+        //    if (!currentRanges.contains(aclJMX) && !removeJMX.contains(aclJMX)) // if not found then remove....
+        //        removeJMX.add(aclJMX);
+        //for (String aclOpsCtr : aclsOpsCtr)
+        //    if (!currentRanges.contains(aclOpsCtr) && !removeOpsCtr.contains(aclOpsCtr)) // if not found then remove....
+        //        removeOpsCtr.add(aclOpsCtr);
+        //for (String aclNativeTransport : aclsNativeTransport)
+        //    if (!currentRanges.contains(aclNativeTransport) && !removeNativeTransport.contains(aclNativeTransport)) // if not found then remove....
+        //        removeNativeTransport.add(aclNativeTransport);
 
         if (remove.size() > 0)
         {
-            membership.removeACL(remove, port, port);
+            membership.removeACL(remove, port, portOpsCtr);
             firstTimeUpdated = true;
         }
-        if (removeJMX.size() > 0)
-        {
-            membership.removeACL(removeJMX, portJMX, portJMX);
-        }
-        if (removeOpsCtr.size() > 0)
-        {
-            membership.removeACL(removeOpsCtr, portOpsCtr, portOpsCtr);
-        }
-        if (removeNativeTransport.size() > 0)
-        {
-            membership.removeACL(removeNativeTransport, portNativeTransport, portNativeTransport);
-        }
+        //if (removeJMX.size() > 0)
+        //{
+        //    membership.removeACL(removeJMX, portJMX, portJMX);
+        //}
+        //if (removeOpsCtr.size() > 0)
+        //{
+        //    membership.removeACL(removeOpsCtr, portOpsCtr, portOpsCtr);
+        //}
+        //if (removeNativeTransport.size() > 0)
+        //{
+        //    membership.removeACL(removeNativeTransport, portNativeTransport, portNativeTransport);
+        //}
 
     }
 
