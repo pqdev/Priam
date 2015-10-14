@@ -16,6 +16,7 @@
 package com.netflix.priam.defaultimpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.amazonaws.services.ec2.AmazonEC2;
@@ -415,7 +416,7 @@ public class PriamConfiguration implements IConfiguration
     public ArrayList getDataFileLocations()
     {
         String value = config.get(CONFIG_DATA_LOCATION, DEFAULT_DATA_LOCATION);
-	return new ArrayList(Arrays.asList(value.split(',')));
+	return new ArrayList(Arrays.asList(value.split(",")));
     }
 
 
