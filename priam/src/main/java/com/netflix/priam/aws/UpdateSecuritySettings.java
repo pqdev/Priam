@@ -80,7 +80,7 @@ public class UpdateSecuritySettings extends Task
         //int portJMX = config.getJmxPort();
         //int portNativeTransport = config.getNativeTransportPort();
         int portOpsCtr = 61620;
-        List<String> acls = membership.listACL(port, portOptCtr);
+        List<String> acls = membership.listACL(port, portOpsCtr);
         //List<String> aclsJMX = membership.listACL(portJMX, portJMX);
         //List<String> aclsNativeTransport = membership.listACL(portNativeTransport, portNativeTransport);
         //List<String> aclsOpsCtr = membership.listACL(portOpsCtr, portOpsCtr);
@@ -107,7 +107,7 @@ public class UpdateSecuritySettings extends Task
         
         if (add.size() > 0)
         {
-            membership.addACL(add, port, port);
+            membership.addACL(add, port, portOpsCtr);
             firstTimeUpdated = true;
         }
         //if (addJMX.size() > 0)
