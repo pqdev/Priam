@@ -84,6 +84,13 @@ public class FakeConfiguration implements IConfiguration
     }
 
     @Override
+    public ArrayList getDataFileLocations()
+    {
+        // TODO Auto-generated method stub
+        return Lists.newArrayList("target/data");
+    }
+
+    @Override
     public String getCacheLocation()
     {
         // TODO Auto-generated method stub
