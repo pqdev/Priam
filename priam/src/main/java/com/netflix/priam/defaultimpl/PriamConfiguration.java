@@ -415,15 +415,18 @@ public class PriamConfiguration implements IConfiguration
     @Override
     public ArrayList getDataFileLocations()
     {
+        // this returns all data file locations as a list
         String value = config.get(CONFIG_DATA_LOCATION, DEFAULT_DATA_LOCATION);
-	return new ArrayList(Arrays.asList(value.split(",")));
+        return new ArrayList(Arrays.asList(value.split(",")));
     }
-
 
     @Override
     public String getDataFileLocation()
     {
-        return config.get(CONFIG_DATA_LOCATION, DEFAULT_DATA_LOCATION);
+        // this returns only the first data file location (for backwards compatibility)
+        String value = config.get(CONFIG_DATA_LOCATION, DEFAULT_DATA_LOCATION);
+        ArrayList<String> array = new ArrayList(Arrays.asList(value.split(",")));
+        return array.get(0);
     }
 
     @Override
