@@ -116,6 +116,13 @@ public class PriamConfiguration implements IConfiguration
     private static final String CONFIG_COMMITLOG_RESTORE_MAX = PRIAM_PRE + ".clrestore.max";
     private static final String CONFIG_CLIENT_SSL_ENABLED = PRIAM_PRE + ".client.sslEnabled";
     private static final String CONFIG_INTERNODE_ENCRYPTION = PRIAM_PRE + ".internodeEncryption";
+    
+    private static final String CONFIG_SERVER_ENCRYPTION_KEYSTORE = PRIAM_PRE + ".serverEncryptionKeystore";
+    private static final String CONFIG_SERVER_ENCRYPTION_KEYSTORE_PASSWORD = PRIAM_PRE + ".serverEncryptionKeystorePassword";
+    private static final String CONFIG_SERVER_ENCRYPTION_TRUSTSTORE = PRIAM_PRE + ".serverEncryptionTruststore";
+    private static final String CONFIG_SERVER_ENCRYPTION_TRUSTSTORE_PASSWORD = PRIAM_PRE + ".serverEncryptionTruststorePassword";
+    private static final String CONFIG_SERVER_ENCRYPTION_REQUIRE_CLIENT_AUTH = PRIAM_PRE + ".serverEncryptionRequireClientAuth";
+    
     private static final String CONFIG_DSNITCH_ENABLED = PRIAM_PRE + ".dsnitchEnabled";
 
     private static final String CONFIG_CONCURRENT_READS = PRIAM_PRE + ".concurrentReads";
@@ -835,6 +842,31 @@ public class PriamConfiguration implements IConfiguration
    public String getInternodeEncryption()
     {
         return config.get(CONFIG_INTERNODE_ENCRYPTION, "none");
+    }
+    
+    public String getServerEncryptionKeystore()
+    {
+        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE, "conf/.keystore");
+    }
+    
+    public String getServerEncryptionKeystorePassword()
+    {
+        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE_PASSWORD, "cassandra");
+    }
+
+    public String getServerEncryptionTruststore()
+    {
+        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE, "conf/.truststore");
+    }
+
+    public String getServerEncryptionTruststorePassword()
+    {
+        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE_PASSWORD, "cassandra");
+    }
+
+    public String getServerEncryptionRequireClientAuth()
+    {
+        return config.get(CONFIG_SERVER_ENCRYPTION_REQUIRE_CLIENT_AUTH, "false");
     }
 
     public boolean isDynamicSnitchEnabled()
