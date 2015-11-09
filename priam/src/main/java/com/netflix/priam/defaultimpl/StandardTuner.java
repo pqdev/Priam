@@ -170,6 +170,11 @@ public class StandardTuner implements CassandraTuner
         //the server-side (internode) ssl settings
         Map serverEnc = (Map)map.get("server_encryption_options");
         serverEnc.put("internode_encryption", config.getInternodeEncryption());
+        serverEnc.put("keystore", config.getServerEncryptionKeystore());
+        serverEnc.put("keystore_password", config.getServerEncryptionKeystorePassword());
+        serverEnc.put("truststore", config.getServerEncryptionTruststore());
+        serverEnc.put("truststore_password", config.getServerEncryptionTruststorePassword());
+        serverEnc.put("require_client_auth", config.getServerEncryptionRequireClientAuth());
     }
 
     protected void configureCommitLogBackups() throws IOException

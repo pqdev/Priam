@@ -525,6 +525,32 @@ public class FakeConfiguration implements IConfiguration
         return "all";
     }
 
+    public String getServerEncryptionKeystore()
+    {
+        return "conf/.keystore";
+    }
+    
+    public String getServerEncryptionKeystorePassword()
+    {
+        return "cassandra";
+    }
+    
+    public String getServerEncryptionTruststore()
+    {
+        return "conf/.truststore";
+    }
+    
+    public String getServerEncryptionTruststorePassword()
+    {
+        return "cassandra";
+    }
+    
+    public String getServerEncryptionRequireClientAuth()
+    {
+        return "false";
+    }
+    
+    
     public boolean isDynamicSnitchEnabled()
     {
         return true;

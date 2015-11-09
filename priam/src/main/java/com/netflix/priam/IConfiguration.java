@@ -418,6 +418,11 @@ public interface IConfiguration
     public boolean isClientSslEnabled();
 
     public String getInternodeEncryption();
+    public String getServerEncryptionKeystore();
+    public String getServerEncryptionKeystorePassword();
+    public String getServerEncryptionTruststore();
+    public String getServerEncryptionTruststorePassword();
+    public String getServerEncryptionRequireClientAuth();
 
     public boolean isDynamicSnitchEnabled();
 
