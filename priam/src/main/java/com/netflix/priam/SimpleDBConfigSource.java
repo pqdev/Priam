@@ -81,7 +81,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         } 
         while (nextToken != null);
-/*
+
         // read in additional info from simpleDB
         System.out.println("Start of new SimpleDB section");
 
@@ -123,7 +123,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
             System.out.println("SimpleDB6");
         } while (nextToken != null);
         System.out.println("SimpleDB7");
-        */
+
     }
 
     private void addProperty(Item item) 
