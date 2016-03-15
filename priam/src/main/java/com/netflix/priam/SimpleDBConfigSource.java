@@ -89,7 +89,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         do
         {
             SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, appid));
-            System.out.println("request="+request.toString())
+            System.out.println("request="+request.toString());
             request.setNextToken(nextToken);
             SelectResult result = simpleDBClient.select(request);
             nextToken = result.getNextToken();
