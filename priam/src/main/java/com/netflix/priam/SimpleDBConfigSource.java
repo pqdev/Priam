@@ -110,6 +110,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                          .withDomainName(DOMAIN_SECURITY)
                          .withItemName(data.get(ITEMNAME))
                          .withAttributes(new ReplaceableAttribute("instanceId", INSTANCE_ID, false));
+                    System.out.println("req="+req.toString());
                      simpleDBClient.putAttributes(req);
                     System.out.println("SimpleDB5");
                   GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, "instanceId").withConsistentRead(true);
@@ -148,6 +149,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         if (data.containsKey(prop) && StringUtils.isBlank(dc))
             return;
         data.put(prop, value);
+        System.out.println("prop="+prop+" value="+value);
     }
 
 
