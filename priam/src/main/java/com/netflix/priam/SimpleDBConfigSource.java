@@ -89,16 +89,15 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         do
         {
             SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, appid));
+            System.out.println("request="+request.toString())
             request.setNextToken(nextToken);
             SelectResult result = simpleDBClient.select(request);
             nextToken = result.getNextToken();
             Iterator<Item> itemiter = result.getItems().iterator();
-            System.out.println("SimpleDB2");
+            System.out.println("SimpleDB2,result="+result.toString());
             while (itemiter.hasNext()) {
-                System.out.println("SimpleDB3");
+                System.out.println("SimpleDB3,itemiter="+itemiter.toString());
                 addProperty(itemiter.next());
-
-
                 String ks = data.get(KEYSTORE);
 
                 if(ks == null) {
@@ -128,6 +127,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
     private void addProperty(Item item) 
     {
+        System.out.println("item="+item.toString());
         Iterator<Attribute> attrs = item.getAttributes().iterator();
         String prop = "";
         String value = "";
