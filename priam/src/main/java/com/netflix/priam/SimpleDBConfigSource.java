@@ -114,7 +114,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      PutAttributesRequest req = new PutAttributesRequest()
                          .withDomainName(DOMAIN_SECURITY)
                          .withItemName(dataSecurity.get(ITEMNAME))
-                         .withAttributes(new ReplaceableAttribute(INSTANCE_ID, IID, false));
+                         .withAttributes(new ReplaceableAttribute(INSTANCE_ID, IID, true));
                      logger.info("req=" + req.toString());
                      simpleDBClient.putAttributes(req);
                      logger.info("SimpleDB5");
