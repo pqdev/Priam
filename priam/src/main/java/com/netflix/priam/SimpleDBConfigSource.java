@@ -36,7 +36,8 @@ import java.util.Map;
 public final class SimpleDBConfigSource extends AbstractConfigSource 
 {
     private static final Logger logger = LoggerFactory.getLogger(SimpleDBConfigSource.class.getName());
-    private final String INSTANCE_ID = SystemUtils.getDataFromUrl("http://169.254.169.254/latest/meta-data/instance-id").trim();
+    private final String IID = SystemUtils.getDataFromUrl("http://169.254.169.254/latest/meta-data/instance-id").trim();
+    private static String INSTANCE_ID="instanceId";
     private static String APP_ID = "appId"; // ASG
     private static String PROPERTY = "property";
     private static String PROPERTY_VALUE = "value";
@@ -113,7 +114,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      PutAttributesRequest req = new PutAttributesRequest()
                          .withDomainName(DOMAIN_SECURITY)
                          .withItemName(dataSecurity.get(ITEMNAME))
-                         .withAttributes(new ReplaceableAttribute("instanceId", dataSecurity.get(INSTANCE_ID), false));
+                         .withAttributes(new ReplaceableAttribute(INSTANCE_ID, IID, false));
                      logger.info("req=" + req.toString());
                      simpleDBClient.putAttributes(req);
                      logger.info("SimpleDB5");
@@ -181,9 +182,9 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         }
 
         dataSecurity.put(KEYSTORE, ks);
-        System.out.println("key="+KEYSTORE+" value="+ks);
+        System.out.println("key="+KEYSTORE+",value="+ks);
         dataSecurity.put(INSTANCE_ID, iid);
-        System.out.println("key="+INSTANCE_ID+" value="+iid);
+        System.out.println("key="+INSTANCE_ID+",value="+iid);
     }
 
 
