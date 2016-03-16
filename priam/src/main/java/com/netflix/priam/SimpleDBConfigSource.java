@@ -50,6 +50,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
     private static String SECURITY_QUERY = "select itemName, keystore, instanceId, updateTimestamp, truststore from " + DOMAIN_SECURITY + " where " + APP_ID + "='%s'";
 
     private final Map<String, String> data = Maps.newConcurrentMap();
+    private final Map<String, String> dataSecurity = Maps.newConcurrentMap();
     private final ICredential provider;
 
     @Inject
@@ -98,9 +99,11 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
             Iterator<Item> itemiter = result.getItems().iterator();
             logger.info("SimpleDB2,result="+result.toString());
             while (itemiter.hasNext()) {
-                logger.info("SimpleDB3,itemiter="+itemiter.toString());
-                addProperty(itemiter.next());
-                String ks = data.get(KEYSTORE);
+                logger.info("SimpleDB3,itemiter=" + itemiter.toString());
+
+                addPropertySecurity(itemiter.next());
+                String ks = dataSecurity.get(KEYSTORE);
+                logger.info("ks=" + ks);
 
                 if(ks == null) {
                     logger.info("SimpleDB4");
@@ -109,13 +112,15 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                       // pi.setKeystore(iid);
                      PutAttributesRequest req = new PutAttributesRequest()
                          .withDomainName(DOMAIN_SECURITY)
-                         .withItemName(data.get(ITEMNAME))
-                         .withAttributes(new ReplaceableAttribute("instanceId", INSTANCE_ID, false));
-                    logger.info("req=" + req.toString());
+                         .withItemName(dataSecurity.get(ITEMNAME))
+                         .withAttributes(new ReplaceableAttribute("instanceId", dataSecurity.get(INSTANCE_ID), false));
+                     logger.info("req=" + req.toString());
                      simpleDBClient.putAttributes(req);
-                    logger.info("SimpleDB5");
-                  GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, "instanceId").withConsistentRead(true);
+                     logger.info("SimpleDB5");
+                     GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, dataSecurity.get(ITEMNAME)).withConsistentRead(true);
+                     logger.info("getReq="+getReq.toString());
                      GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
+                     logger.info("attResult="+attResult.toString());
 
                   for (Attribute attr : attResult.getAttributes()) {
                          System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
@@ -129,11 +134,13 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
     private void addProperty(Item item) 
     {
-        System.out.println("item="+item.toString());
+        System.out.println("item=" + item.toString());
         Iterator<Attribute> attrs = item.getAttributes().iterator();
+
         String prop = "";
         String value = "";
         String dc = "";
+
         while (attrs.hasNext()) 
         {
             Attribute att = attrs.next();
@@ -151,7 +158,32 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         if (data.containsKey(prop) && StringUtils.isBlank(dc))
             return;
         data.put(prop, value);
-        System.out.println("prop="+prop+" value="+value);
+    }
+
+    private void addPropertySecurity(Item item)
+    {
+        System.out.println("item="+item.toString());
+        Iterator<Attribute> attrs = item.getAttributes().iterator();
+
+        String itemName = item.getName();
+        System.out.println("itemName=" + itemName);
+        dataSecurity.put(ITEMNAME, itemName);
+
+        String ks = "";
+        String iid = "";
+        while (attrs.hasNext())
+        {
+            Attribute att = attrs.next();
+            if (att.getName().equals(KEYSTORE))
+                ks = att.getValue();
+            else if (att.getName().equals(INSTANCE_ID))
+                iid = att.getValue();
+        }
+
+        dataSecurity.put(KEYSTORE, ks);
+        System.out.println("key="+KEYSTORE+" value="+ks);
+        dataSecurity.put(INSTANCE_ID, iid);
+        System.out.println("key="+INSTANCE_ID+" value="+iid);
     }
 
 
