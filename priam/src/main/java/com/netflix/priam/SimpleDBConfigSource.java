@@ -103,10 +103,10 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                 logger.info("SimpleDB3,itemiter=" + itemiter.toString());
 
                 addPropertySecurity(itemiter.next());
-                String ks = dataSecurity.get(KEYSTORE);
-                logger.info("ks=" + ks);
+                String iidRow = dataSecurity.get(INSTANCE_ID);
+                logger.info("iid[" + iidRow + "]");
 
-                if(ks == null) {
+                if(iidRow.equals("")) {
                     logger.info("SimpleDB4");
                      // this keystore may be available
                      // try to update this row with the instanceId
@@ -127,6 +127,9 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                          System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                      } // for
                  } // if
+                else {
+                    logger.info("iidRow is not null:"+iidRow);
+                }
             } // while more rows
             logger.info("SimpleDB6");
         } while (nextToken != null);
