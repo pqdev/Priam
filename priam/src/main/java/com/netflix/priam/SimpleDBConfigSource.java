@@ -70,7 +70,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         String nextToken = null;
         String appid = asgName.lastIndexOf('-') > 0 ? asgName.substring(0, asgName.indexOf('-')) : asgName;
-        logger.info(String.format("appid1 used to fetch properties is: %s", appid));
+        logger.info(String.format("appid2 used to fetch properties is: %s", appid));
         do 
         {
             SelectRequest request = new SelectRequest(String.format(ALL_QUERY, appid));
@@ -123,9 +123,11 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
                      logger.info("attResult="+attResult.toString());
 
-                  for (Attribute attr : attResult.getAttributes()) {
+                     for (Attribute attr : attResult.getAttributes()) {
                          System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                      } // for
+                     logger.info("found place for iid, breaking");
+                     break;
                  } // if
                 else {
                     logger.info("iidRow is not null:"+iidRow);
