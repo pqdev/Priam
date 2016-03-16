@@ -72,36 +72,38 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         do 
         {
             SelectRequest request = new SelectRequest(String.format(ALL_QUERY, appid));
+            logger.info(String.format("first request is: %s", request.toString()));
             request.setNextToken(nextToken);
             SelectResult result = simpleDBClient.select(request);
             nextToken = result.getNextToken();
             Iterator<Item> itemiter = result.getItems().iterator();
+            logger.info("first response about to iter over");
             while (itemiter.hasNext())
               addProperty(itemiter.next());
-
+            logger.info("first response after iter");
         } 
         while (nextToken != null);
 
         // read in additional info from simpleDB
-        System.out.println("Start of new SimpleDB section");
+        logger.info("Start of new SimpleDB section");
 
         nextToken = null;
         do
         {
             SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, appid));
-            System.out.println("request="+request.toString());
+            logger.info("request="+request.toString());
             request.setNextToken(nextToken);
             SelectResult result = simpleDBClient.select(request);
             nextToken = result.getNextToken();
             Iterator<Item> itemiter = result.getItems().iterator();
-            System.out.println("SimpleDB2,result="+result.toString());
+            logger.info("SimpleDB2,result="+result.toString());
             while (itemiter.hasNext()) {
-                System.out.println("SimpleDB3,itemiter="+itemiter.toString());
+                logger.info("SimpleDB3,itemiter="+itemiter.toString());
                 addProperty(itemiter.next());
                 String ks = data.get(KEYSTORE);
 
                 if(ks == null) {
-                    System.out.println("SimpleDB4");
+                    logger.info("SimpleDB4");
                      // this keystore may be available
                      // try to update this row with the instanceId
                       // pi.setKeystore(iid);
@@ -109,9 +111,9 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                          .withDomainName(DOMAIN_SECURITY)
                          .withItemName(data.get(ITEMNAME))
                          .withAttributes(new ReplaceableAttribute("instanceId", INSTANCE_ID, false));
-                    System.out.println("req="+req.toString());
+                    logger.info("req=" + req.toString());
                      simpleDBClient.putAttributes(req);
-                    System.out.println("SimpleDB5");
+                    logger.info("SimpleDB5");
                   GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, "instanceId").withConsistentRead(true);
                      GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
 
@@ -120,10 +122,9 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      } // for
                  } // if
             } // while more rows
-            System.out.println("SimpleDB6");
+            logger.info("SimpleDB6");
         } while (nextToken != null);
-        System.out.println("SimpleDB7");
-
+        logger.info("SimpleDB7");
     }
 
     private void addProperty(Item item) 
