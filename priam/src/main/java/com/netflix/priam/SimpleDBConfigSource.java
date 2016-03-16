@@ -70,7 +70,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         String nextToken = null;
         String appid = asgName.lastIndexOf('-') > 0 ? asgName.substring(0, asgName.indexOf('-')) : asgName;
-        logger.info(String.format("appidx used to fetch properties is: %s", appid));
+        logger.info(String.format("appid1 used to fetch properties is: %s", appid));
         do 
         {
             SelectRequest request = new SelectRequest(String.format(ALL_QUERY, appid));
