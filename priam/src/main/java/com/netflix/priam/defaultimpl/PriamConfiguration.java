@@ -846,7 +846,7 @@ public class PriamConfiguration implements IConfiguration
     
     public String getServerEncryptionKeystore()
     {
-        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE, "conf/.keystore");
+        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE, getCassHome() + "/conf/.keystore");
     }
     
     public String getServerEncryptionKeystorePassword()
@@ -856,7 +856,7 @@ public class PriamConfiguration implements IConfiguration
 
     public String getServerEncryptionTruststore()
     {
-        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE, "conf/.truststore");
+        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE, getCassHome() + "/conf/.truststore");
     }
 
     public String getServerEncryptionTruststorePassword()
