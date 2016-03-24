@@ -64,6 +64,7 @@ public class PriamServer
         if (id.getInstance().isOutOfService())
             return;
 
+        logger.info("downloading SSL files");
         SSLFiles.download(config);
 
         // start to schedule jobs
