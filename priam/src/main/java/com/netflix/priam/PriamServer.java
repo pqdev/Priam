@@ -32,6 +32,7 @@ import com.netflix.priam.scheduler.PriamScheduler;
 import com.netflix.priam.utils.CassandraMonitor;
 import com.netflix.priam.utils.Sleeper;
 import com.netflix.priam.utils.TuneCassandra;
+import com.netflix.priam.utils.SSLFiles;
 
 /**
  * Start all tasks here - Property update task - Backup task - Restore task -
@@ -62,6 +63,8 @@ public class PriamServer
     {     
         if (id.getInstance().isOutOfService())
             return;
+
+        SSLFiles.download(config);
 
         // start to schedule jobs
         scheduler.start();

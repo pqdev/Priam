@@ -625,4 +625,14 @@ public class FakeConfiguration implements IConfiguration
 	public List<String> getLocalCidrRanges() {
 		return new ArrayList<String>();
 	}
+    @Override
+    public String getKeystore() {
+        return "";
+    }
+
+    @Override
+    public String getTruststore()
+    {
+        return "";
+    }
 }

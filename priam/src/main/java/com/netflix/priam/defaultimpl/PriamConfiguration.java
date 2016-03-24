@@ -41,6 +41,8 @@ public class PriamConfiguration implements IConfiguration
 {
     public static final String PRIAM_PRE = "priam";
 
+    private static final String CONFIG_KEYSTORE = "keystore";
+    private static final String CONFIG_TRUSTSTORE = "truststore";
     private static final String CONFIG_CASS_HOME_DIR = PRIAM_PRE + ".cass.home";
     private static final String CONFIG_CASS_START_SCRIPT = PRIAM_PRE + ".cass.startscript";
     private static final String CONFIG_CASS_STOP_SCRIPT = PRIAM_PRE + ".cass.stopscript";
@@ -753,6 +755,17 @@ public class PriamConfiguration implements IConfiguration
 	public String getTargetKSName() {
 		return config.get(CONFIG_TARGET_KEYSPACE_NAME);
 	}
+
+    @Override
+    public String getKeystore() {
+        return config.get(CONFIG_KEYSTORE);
+    }
+
+    @Override
+    public String getTruststore()
+    {
+        return config.get(CONFIG_TRUSTSTORE);
+    }
 
 	@Override
 	public String getTargetCFName() {

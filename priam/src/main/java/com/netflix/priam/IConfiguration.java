@@ -449,4 +449,6 @@ public interface IConfiguration
     
     public String getOpsCenterHostIp();
     public List<String> getLocalCidrRanges();
+    public String getKeystore();
+    public String getTruststore();
 }

@@ -16,6 +16,7 @@
 package com.netflix.priam.aws;
 
 import java.util.ArrayList;
+//import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,10 +55,14 @@ public class SDBInstanceData
         public final static String UPDATE_TS = "updateTimestamp";
         public final static String LOCATION = "location";
         public final static String HOSTNAME = "hostname";
+        public final static String KEYSTORE = "keystore";
+        public final static String ITEMNAME = "itemName";   // technically not an attribute...
     }
     public static final String DOMAIN = "InstanceIdentity";
+    public static final String DOMAIN_SECURITY = "InstanceSecurity";
     public static final String ALL_QUERY = "select * from " + DOMAIN + " where " + Attributes.APP_ID + "='%s'";
     public static final String INSTANCE_QUERY = "select * from " + DOMAIN + " where " + Attributes.APP_ID + "='%s' and " + Attributes.LOCATION + "='%s' and " + Attributes.ID + "='%d'";
+    public static final String SECURITY_QUERY = "select itemName, keystore, instanceId, updateTimestamp, truststore from " + DOMAIN_SECURITY + " where " + Attributes.APP_ID + "='%s'";
 
     private final ICredential provider;
     
@@ -66,7 +71,52 @@ public class SDBInstanceData
     {
         this.provider = provider;       
     }
+    /**
+     * Get s3 path to SSL key from SimpleDB and update instanceId
+     *
+     * @param app Cluster name
+     * @return the node with the given {@code id}, or {@code null} if no such node exists
+     */
+    /*
+    public PriamInstance gets3KeyPath(String app, String iid)
+    {
+        AmazonSimpleDBClient simpleDBClient = getSimpleDBClient();
+        Set<PriamInstance> inslist = new HashSet<PriamInstance>();
+        String nextToken = null;
+        do
+        {
+            SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, app));
+            request.setNextToken(nextToken);
+            SelectResult result = simpleDBClient.select(request);
+            nextToken = result.getNextToken();
+            Iterator<Item> itemiter = result.getItems().iterator();
+            while (itemiter.hasNext())
+            {
+                PriamInstance pi = transform(itemiter.next());
+                String ks = pi.getKeystore();
+                if(ks == null) {
+                    // this keystore may be available
+                    // try to update this row with the instanceId
+                    // pi.setKeystore(iid);
+                    PutAttributesRequest req       = new PutAttributesRequest req = new PutAttributesRequest()
+                                                         .withDomainName(DOMAIN_SECURITY)
+                                                         .withItemName(pi.getItemname())
+                                                         .withAttributes(new ReplaceableAttribute("instanceId", iid, false));
+                    simpleDBClient.putAttributes(req);
+                    GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, "instanceId").withConsistentRead(true);
+                    GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
 
+                    for (Attribute attr : attResult.getAttributes()) {
+                        System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
+                    }
+
+                }
+            }
+
+        } while (nextToken != null);
+        return inslist;
+    }
+    */
     /**
      * Get the instance details from SimpleDB
      * 
@@ -216,6 +266,10 @@ public class SDBInstanceData
                 ins.setDC(att.getValue());
             else if (att.getName().equals(Attributes.UPDATE_TS))
                 ins.setUpdatetime(Long.parseLong(att.getValue()));
+ //           else if (att.getName().equals(Attributes.KEYSTORE))
+ //               ins.setKeystore(att.getValue());
+ //           else if (att.getName().equals(Attributes.ITEMNAME))
+ //               ins.setItemname(att.getValue());
         }
         return ins;
     }
