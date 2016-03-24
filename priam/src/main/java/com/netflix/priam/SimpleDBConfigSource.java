@@ -1,5 +1,7 @@
 package com.netflix.priam;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
@@ -11,12 +13,18 @@ import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.netflix.priam.aws.S3FileSystem;
+import com.netflix.priam.backup.AbstractBackupPath;
+import com.netflix.priam.backup.BackupRestoreException;
+import com.netflix.priam.backup.RangeReadInputStream;
 import com.netflix.priam.utils.SystemUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.io.BufferedInputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -43,7 +51,10 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
     private static String PROPERTY_VALUE = "value";
     private static String REGION = "region";
     private static String KEYSTORE = "keystore";
+    private static String TRUSTSTORE = "truststore";
     private static String ITEMNAME = "itemName";
+    private static String S3BUCKET_PREFIX = "xrs-support-prod/";
+    private static final long MAX_BUFFERED_IN_STREAM_SIZE = 5 * 1024 * 1024;
 
     private static final String DOMAIN = "PriamProperties";
     private static String ALL_QUERY = "select * from " + DOMAIN + " where " + APP_ID + "='%s'";
@@ -55,13 +66,13 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
     private final ICredential provider;
 
     @Inject
-    public SimpleDBConfigSource(final ICredential provider) 
+    public SimpleDBConfigSource(final ICredential provider)
     {
         this.provider = provider;
     }
 
     @Override
-    public void intialize(final String asgName, final String region) 
+    public void intialize(final String asgName, final String region, final AmazonS3Client s3Client)
     {
         super.intialize(asgName, region);
 
@@ -104,6 +115,8 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
                 addPropertySecurity(itemiter.next());
                 String iidRow = dataSecurity.get(INSTANCE_ID);
+                String keystore = dataSecurity.get(KEYSTORE);
+                String truststore = dataSecurity.get(TRUSTSTORE);
                 logger.info("iid[" + iidRow + "]");
 
                 if(iidRow.equals("")) {
@@ -127,11 +140,15 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      for (Attribute attr : attResult.getAttributes()) {
                          System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                          if (attr.getName().equals(INSTANCE_ID) && attr.getValue().equals(IID)) {
-                             logger.info("found place for iid " + IID + " on row "+dataSecurity.get(ITEMNAME)+"; breaking");
+                             logger.info("found place for iid " + IID + " on row " + dataSecurity.get(ITEMNAME) + "; breaking");
                              breakNow=true;
                          }
                      } // for
-                    if(breakNow) break;
+                    if(breakNow) {
+                        //download(s3Client, keystore);
+                        //download(s3Client, truststore);
+                        break;
+                    }
                  } // if
                 else {
                     logger.info("iidRow is not null:"+iidRow);
@@ -181,6 +198,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         String ks = "";
         String iid = "";
+        String ts = "";
         while (attrs.hasNext())
         {
             Attribute att = attrs.next();
@@ -188,15 +206,17 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                 ks = att.getValue();
             else if (att.getName().equals(INSTANCE_ID))
                 iid = att.getValue();
+            else if (att.getName().equals(TRUSTSTORE))
+                ts = att.getValue();
         }
 
         dataSecurity.put(KEYSTORE, ks);
         System.out.println("key="+KEYSTORE+",value="+ks);
+        dataSecurity.put(TRUSTSTORE, ts);
+        System.out.println("key=" + TRUSTSTORE + ",value=" + ts);
         dataSecurity.put(INSTANCE_ID, iid);
-        System.out.println("key="+INSTANCE_ID+",value="+iid);
+        System.out.println("key=" + INSTANCE_ID + ",value=" + iid);
     }
-
-
 
     @Override
     public int size() 
@@ -205,7 +225,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
     }
 
     @Override
-    public String get(final String key) 
+    public String get(final String key)
     {
         return data.get(key);
     }
@@ -216,4 +236,23 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         Preconditions.checkNotNull(value, "Value can not be null for configurations.");
         data.put(key, value);
     }
+/*
+    private void download(AmazonS3Client s3Client, String path) throws BackupRestoreException
+    {
+        try
+        {
+            AbstractBackupPath newPath;
+            long contentLen = s3Client.getObjectMetadata(S3BUCKET_PREFIX, path).getContentLength();
+         //   RangeReadInputStream rris = new RangeReadInputStream(s3Client, S3BUCKET_PREFIX, path);
+         //   compress.decompressAndClose(new BufferedInputStream(rris, (int)contentLen), os);
+         //   bytesDownloaded.addAndGet(contentLen);
+
+            RangeReadInputStream
+        }
+        catch (Exception e)
+        {
+            throw new BackupRestoreException(e.getMessage(), e);
+        }
+    }
+    */
 }
