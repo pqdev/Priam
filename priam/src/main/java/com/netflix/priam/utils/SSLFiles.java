@@ -27,7 +27,7 @@ public class SSLFiles {
         try
         {
             System.out.println("SSLFiles keystore="+config.getKeystore());
-            System.out.println("SSLFiles truststore=" + config.getTruststore());
+            System.out.println("SSLFiles2 truststore=" + config.getTruststore());
 
             int i = config.getKeystore().indexOf("/");
             System.out.println("i="+i);
@@ -62,7 +62,7 @@ public class SSLFiles {
 
     private static void writeit(InputStream input, OutputStream output) throws IOException
     {
-        SnappyInputStream is = new SnappyInputStream(new BufferedInputStream(input));
+        InputStream is = new BufferedInputStream(input);
         byte data[] = new byte[BUFFER];
         BufferedOutputStream dest1 = new BufferedOutputStream(output, BUFFER);
         try
