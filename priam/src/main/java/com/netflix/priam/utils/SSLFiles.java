@@ -18,7 +18,8 @@ public class SSLFiles {
 
     private static String TRUSTSTORE = "truststore";
     private static String ITEMNAME = "itemName";
-    private static String S3BUCKET_PREFIX = "xrs-support-prod/";
+    //private static String S3BUCKET = "xrs-support-prod";
+    private static String S3BUCKET = "xrs-support";
     private static final int BUFFER = 16 * 1024;
     private static String KEYSTORE_PATH = "/conf/.keystore";
     private static String TRUSTSTORE_PATH = "/conf/.truststore";
@@ -35,13 +36,13 @@ public class SSLFiles {
             client.setEndpoint(config.getS3EndPoint());
 
             OutputStream os = new FileOutputStream(KEYSTORE_PATH);
-            GetObjectRequest req = new GetObjectRequest(S3BUCKET_PREFIX, config.getKeystore());
+            GetObjectRequest req = new GetObjectRequest(S3BUCKET, config.getKeystore());
             S3ObjectInputStream is = null;
             is = client.getObject(req).getObjectContent();
             writeit(is, os);
 
             OutputStream os2 = new FileOutputStream(TRUSTSTORE_PATH);
-            GetObjectRequest req2 = new GetObjectRequest(S3BUCKET_PREFIX, config.getTruststore());
+            GetObjectRequest req2 = new GetObjectRequest(S3BUCKET, config.getTruststore());
             S3ObjectInputStream is2 = null;
             is2 = client.getObject(req2).getObjectContent();
             writeit(is2, os2);
