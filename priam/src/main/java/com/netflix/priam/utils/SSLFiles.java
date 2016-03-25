@@ -18,8 +18,6 @@ public class SSLFiles {
 
     private static String TRUSTSTORE = "truststore";
     private static String ITEMNAME = "itemName";
-    //private static String S3BUCKET = "xrs-support-prod";
-    private static String S3BUCKET = "xrs-support";
     private static final int BUFFER = 16 * 1024;
     private static String KEYSTORE_PATH = "/etc/cassandra/conf/.keystore";
     private static String TRUSTSTORE_PATH = "/etc/cassandra/conf/.truststore";
@@ -31,20 +29,29 @@ public class SSLFiles {
             System.out.println("SSLFiles keystore="+config.getKeystore());
             System.out.println("SSLFiles truststore=" + config.getTruststore());
 
+            int i = config.getKeystore().indexOf("/");
+            System.out.println("i="+i);
+            String bucket = config.getKeystore().substring(0, i);
+            String pathKeystore   = config.getKeystore().substring(i+1);
+            i = config.getTruststore().indexOf("/");
+            String pathTruststore = config.getTruststore().substring(i+1);
+
+            System.out.println("SSLFiles bucket="+ bucket);
+            System.out.println("SSLFiles pathKeystore=" + pathKeystore);
+            System.out.println("SSLFiles pathTruststore=" + pathTruststore);
+
             ICredential cred = config.getCredential();
             AmazonS3Client client = new AmazonS3Client(cred.getAwsCredentialProvider());
             client.setEndpoint(config.getS3EndPoint());
 
+            GetObjectRequest req = new GetObjectRequest(bucket, pathKeystore);
+            S3ObjectInputStream is = client.getObject(req).getObjectContent();
             OutputStream os = new FileOutputStream(KEYSTORE_PATH);
-            GetObjectRequest req = new GetObjectRequest(S3BUCKET, config.getKeystore());
-            S3ObjectInputStream is = null;
-            is = client.getObject(req).getObjectContent();
             writeit(is, os);
 
+            GetObjectRequest req2 = new GetObjectRequest(bucket, pathTruststore);
+            S3ObjectInputStream is2 = client.getObject(req2).getObjectContent();
             OutputStream os2 = new FileOutputStream(TRUSTSTORE_PATH);
-            GetObjectRequest req2 = new GetObjectRequest(S3BUCKET, config.getTruststore());
-            S3ObjectInputStream is2 = null;
-            is2 = client.getObject(req2).getObjectContent();
             writeit(is2, os2);
         }
         catch (Exception e)
