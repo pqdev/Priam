@@ -21,8 +21,8 @@ public class SSLFiles {
     //private static String S3BUCKET = "xrs-support-prod";
     private static String S3BUCKET = "xrs-support";
     private static final int BUFFER = 16 * 1024;
-    private static String KEYSTORE_PATH = "/conf/.keystore";
-    private static String TRUSTSTORE_PATH = "/conf/.truststore";
+    private static String KEYSTORE_PATH = "/etc/cassandra/conf/.keystore";
+    private static String TRUSTSTORE_PATH = "/etc/cassandra/conf/.truststore";
 
     public static void download(IConfiguration config) throws BackupRestoreException
     {
