@@ -451,4 +451,5 @@ public interface IConfiguration
     public List<String> getLocalCidrRanges();
     public String getKeystore();
     public String getTruststore();
+    public ICredential getCredential();
 }
