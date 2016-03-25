@@ -983,6 +983,9 @@ public class PriamConfiguration implements IConfiguration
 		return config.get(CONFIG_OPSCENTER_HOST_IP, DEFAULT_OPSCENTER_HOST_IP);
 	}
 
+    @Override
+    public ICredential getCredential() {return provider;};
+
 	@Override
 	public List<String> getLocalCidrRanges() {
 		List<String> list = new ArrayList<String>();
