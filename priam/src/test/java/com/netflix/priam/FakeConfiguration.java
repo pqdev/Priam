@@ -635,4 +635,7 @@ public class FakeConfiguration implements IConfiguration
     {
         return "";
     }
+
+    @Override
+    public ICredential getCredential() {return null;};
 }
