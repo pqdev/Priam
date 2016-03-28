@@ -7,7 +7,6 @@ import com.netflix.priam.IConfiguration;
 import com.netflix.priam.ICredential;
 import com.netflix.priam.backup.BackupRestoreException;
 import org.apache.commons.io.IOUtils;
-import org.xerial.snappy.SnappyInputStream;
 
 import java.io.*;
 
@@ -26,19 +25,12 @@ public class SSLFiles {
     {
         try
         {
-            System.out.println("SSLFiles keystore="+config.getKeystore());
-            System.out.println("SSLFiles2 truststore=" + config.getTruststore());
-
             int i = config.getKeystore().indexOf("/");
             System.out.println("i="+i);
             String bucket = config.getKeystore().substring(0, i);
             String pathKeystore   = config.getKeystore().substring(i+1);
             i = config.getTruststore().indexOf("/");
             String pathTruststore = config.getTruststore().substring(i+1);
-
-            System.out.println("SSLFiles bucket="+ bucket);
-            System.out.println("SSLFiles pathKeystore=" + pathKeystore);
-            System.out.println("SSLFiles pathTruststore=" + pathTruststore);
 
             ICredential cred = config.getCredential();
             AmazonS3Client client = new AmazonS3Client(cred.getAwsCredentialProvider());

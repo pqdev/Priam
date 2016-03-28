@@ -105,7 +105,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
             String truststore2 = data.get(TRUSTSTORE);
 
             if (keystore2.length() > 0 && truststore2.length() > 0) {
-                logger.info("iid " + IID + "already in security table with keystore " + keystore2 + " and truststore" + truststore2);
+                logger.info("iid " + IID + " already in security table with keystore " + keystore2 + " and truststore" + truststore2);
                 return;
             }
         }
@@ -147,7 +147,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
                      Boolean breakNow=false;
                      for (Attribute attr : attResult.getAttributes()) {
-                         System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
+                         logger.info("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                          if (attr.getName().equals(INSTANCE_ID) && attr.getValue().equals(IID)) {
                              logger.info("found place for iid " + IID + " on row " + data.get(ITEMNAME) + "; breaking");
                              match = true;
@@ -172,7 +172,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
     private void addProperty(Item item) 
     {
-        System.out.println("item=" + item.toString());
+        logger.info("item=" + item.toString());
         Iterator<Attribute> attrs = item.getAttributes().iterator();
 
         String prop = "";
@@ -200,11 +200,11 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
     private void addPropertySecurity(Item item)
     {
-        System.out.println("item="+item.toString());
+        logger.info("item="+item.toString());
         Iterator<Attribute> attrs = item.getAttributes().iterator();
 
         String itemName = item.getName();
-        System.out.println("itemName=" + itemName);
+        logger.info("itemName=" + itemName);
         data.put(ITEMNAME, itemName);
 
         String ks = "";
@@ -222,11 +222,11 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         }
 
         data.put(KEYSTORE, ks);
-        System.out.println("key="+KEYSTORE+",value="+ks);
+        logger.info("key="+KEYSTORE+",value="+ks);
         data.put(TRUSTSTORE, ts);
-        System.out.println("key=" + TRUSTSTORE + ",value=" + ts);
+        logger.info("key=" + TRUSTSTORE + ",value=" + ts);
         data.put(INSTANCE_ID, iid);
-        System.out.println("key=" + INSTANCE_ID + ",value=" + iid);
+        logger.info("key=" + INSTANCE_ID + ",value=" + iid);
     }
 
     @Override
