@@ -2,14 +2,7 @@ package com.netflix.priam;
 
 
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
-import com.amazonaws.services.simpledb.model.Attribute;
-import com.amazonaws.services.simpledb.model.Item;
-import com.amazonaws.services.simpledb.model.SelectRequest;
-import com.amazonaws.services.simpledb.model.SelectResult;
-import com.amazonaws.services.simpledb.model.GetAttributesRequest;
-import com.amazonaws.services.simpledb.model.GetAttributesResult;
-import com.amazonaws.services.simpledb.model.PutAttributesRequest;
-import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
+import com.amazonaws.services.simpledb.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.netflix.priam.utils.SystemUtils;
@@ -71,7 +64,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         String nextToken = null;
         String appid = asgName.lastIndexOf('-') > 0 ? asgName.substring(0, asgName.indexOf('-')) : asgName;
-        logger.info(String.format("appid3 used to fetch properties is: %s", appid));
+        logger.info(String.format("appid used to fetch properties is: %s", appid));
         do 
         {
             SelectRequest request = new SelectRequest(String.format(ALL_QUERY, appid));
@@ -92,7 +85,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
         // query - pull keystore, truststore where instanceId=IID.
         // If success, call addPropertySecurity and return.
-        SelectRequest request2 = new SelectRequest(String.format(SECURITY_QUERY2, IID));
+        SelectRequest request2 = new SelectRequest(String.format(SECURITY_QUERY2, IID)).withConsistentRead(true);
         logger.info("request2="+request2.toString());
 
         SelectResult result2 = simpleDBClient.select(request2);
@@ -115,7 +108,8 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         nextToken = null;
         do
         {
-            SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, appid));
+            SelectRequest request = new SelectRequest(String.format(SECURITY_QUERY, appid)).withConsistentRead(true);
+
             logger.info("request="+request.toString());
             request.setNextToken(nextToken);
             SelectResult result = simpleDBClient.select(request);
@@ -134,12 +128,12 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                      // try to update this row with the instanceId
                       // pi.setKeystore(iid);
                      PutAttributesRequest req = new PutAttributesRequest()
+                         .withExpected(new UpdateCondition(INSTANCE_ID, "", true))
                          .withDomainName(DOMAIN_SECURITY)
                          .withItemName(data.get(ITEMNAME))
                          .withAttributes(new ReplaceableAttribute(INSTANCE_ID, IID, true));
                      logger.info("req=" + req.toString());
                      simpleDBClient.putAttributes(req);
-                     logger.info("SimpleDB5");
                      GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, data.get(ITEMNAME)).withConsistentRead(true);
                      logger.info("getReq="+getReq.toString());
                      GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
@@ -200,7 +194,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
 
     private void addPropertySecurity(Item item)
     {
-        logger.info("item="+item.toString());
+        logger.info("item=" + item.toString());
         Iterator<Attribute> attrs = item.getAttributes().iterator();
 
         String itemName = item.getName();
@@ -222,7 +216,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         }
 
         data.put(KEYSTORE, ks);
-        logger.info("key="+KEYSTORE+",value="+ks);
+        logger.info("key=" + KEYSTORE + ",value=" + ks);
         data.put(TRUSTSTORE, ts);
         logger.info("key=" + TRUSTSTORE + ",value=" + ts);
         data.put(INSTANCE_ID, iid);
