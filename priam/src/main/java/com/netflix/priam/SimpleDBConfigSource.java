@@ -50,6 +50,7 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
     private static String ALL_QUERY = "select * from " + DOMAIN + " where " + APP_ID + "='%s'";
     public static final String DOMAIN_SECURITY = "InstanceSecurity";
     private static String SECURITY_QUERY = "select itemName, keystore, instanceId, updateTimestamp, truststore from " + DOMAIN_SECURITY + " where " + APP_ID + "='%s'";
+    private static String SECURITY_QUERY2 = "select keystore, truststore from " + DOMAIN_SECURITY + " where " + INSTANCE_ID + "='%s'";
 
     private final Map<String, String> data = Maps.newConcurrentMap();
     private final ICredential provider;
@@ -89,6 +90,28 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         // read in additional info from simpleDB
         logger.info("Start of new SimpleDB section");
 
+        // query - pull keystore, truststore where instanceId=IID.
+        // If success, call addPropertySecurity and return.
+        SelectRequest request2 = new SelectRequest(String.format(SECURITY_QUERY2, IID));
+        logger.info("request2="+request2.toString());
+
+        SelectResult result2 = simpleDBClient.select(request2);
+        logger.info("SimpleDB2,result2="+result2.toString());
+
+        Iterator<Item> itemiter2 = result2.getItems().iterator();
+        if(itemiter2.hasNext()) {
+            addPropertySecurity(itemiter2.next());
+            String keystore2 = data.get(KEYSTORE);
+            String truststore2 = data.get(TRUSTSTORE);
+
+            if (keystore2.length() > 0 && truststore2.length() > 0) {
+                logger.info("iid " + IID + "already in security table with keystore " + keystore2 + " and truststore" + truststore2);
+                return;
+            }
+        }
+
+        // match not found in table.
+        Boolean match = false;
         nextToken = null;
         do
         {
@@ -100,8 +123,6 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
             Iterator<Item> itemiter = result.getItems().iterator();
             logger.info("SimpleDB2,result="+result.toString());
             while (itemiter.hasNext()) {
-                logger.info("SimpleDB3,itemiter=" + itemiter.toString());
-
                 addPropertySecurity(itemiter.next());
                 String iidRow = data.get(INSTANCE_ID);
                 String keystore = data.get(KEYSTORE);
@@ -109,7 +130,6 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                 logger.info("iid[" + iidRow + "]");
 
                 if(iidRow.equals("")) {
-                    logger.info("SimpleDB4");
                      // this keystore may be available
                      // try to update this row with the instanceId
                       // pi.setKeystore(iid);
@@ -130,12 +150,11 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                          System.out.println("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                          if (attr.getName().equals(INSTANCE_ID) && attr.getValue().equals(IID)) {
                              logger.info("found place for iid " + IID + " on row " + data.get(ITEMNAME) + "; breaking");
+                             match = true;
                              breakNow=true;
                          }
                      } // for
                     if(breakNow) {
-                        //download(s3Client, keystore);
-                        //download(s3Client, truststore);
                         break;
                     }
                  } // if
@@ -143,9 +162,12 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                     logger.info("iidRow is not null:"+iidRow);
                 }
             } // while more rows
-            logger.info("SimpleDB6");
+
+            if(! match) {
+                logger.error("Could not acquire keystore and truststore files");
+                // throw exception here? or let it fail later?
+            }
         } while (nextToken != null);
-        logger.info("SimpleDB7");
     }
 
     private void addProperty(Item item) 
