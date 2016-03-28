@@ -1,6 +1,7 @@
 package com.netflix.priam;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.services.simpledb.model.*;
 import com.google.common.base.Preconditions;
@@ -104,7 +105,6 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
         }
 
         // match not found in table.
-        Boolean match = false;
         nextToken = null;
         do
         {
@@ -133,34 +133,34 @@ public final class SimpleDBConfigSource extends AbstractConfigSource
                          .withItemName(data.get(ITEMNAME))
                          .withAttributes(new ReplaceableAttribute(INSTANCE_ID, IID, true));
                      logger.info("req=" + req.toString());
-                     simpleDBClient.putAttributes(req);
+                     try {
+                         simpleDBClient.putAttributes(req);
+                     }
+                     catch (AmazonServiceException e){
+                         // this exception means this instanceid was updated by another process.
+                         logger.info("can't update simpledb row with instanceid because row already in use:"+IID+" e:"+e);
+                     }
                      GetAttributesRequest getReq = new GetAttributesRequest(DOMAIN_SECURITY, data.get(ITEMNAME)).withConsistentRead(true);
                      logger.info("getReq="+getReq.toString());
                      GetAttributesResult attResult = simpleDBClient.getAttributes(getReq);
                      logger.info("attResult="+attResult.toString());
 
-                     Boolean breakNow=false;
                      for (Attribute attr : attResult.getAttributes()) {
                          logger.info("name: " + attr.getName() + "\tvalue: " + attr.getValue());
                          if (attr.getName().equals(INSTANCE_ID) && attr.getValue().equals(IID)) {
                              logger.info("found place for iid " + IID + " on row " + data.get(ITEMNAME) + "; breaking");
-                             match = true;
-                             breakNow=true;
+                             return;
                          }
                      } // for
-                    if(breakNow) {
-                        break;
-                    }
                  } // if
                 else {
                     logger.info("iidRow is not null:"+iidRow);
                 }
             } // while more rows
 
-            if(! match) {
-                logger.error("Could not acquire keystore and truststore files");
-                // throw exception here? or let it fail later?
-            }
+            logger.error("Could not acquire keystore and truststore files");
+            // throw exception here? or let it fail later?
+
         } while (nextToken != null);
     }
 
