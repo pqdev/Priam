@@ -854,12 +854,12 @@ public class PriamConfiguration implements IConfiguration
 
    public String getInternodeEncryption()
     {
-        return config.get(CONFIG_INTERNODE_ENCRYPTION, "none");
+        return config.get(CONFIG_INTERNODE_ENCRYPTION, "all");
     }
     
     public String getServerEncryptionKeystore()
     {
-        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE, getCassHome() + "/conf/.keystore");
+        return config.get(CONFIG_SERVER_ENCRYPTION_KEYSTORE, getCassHome() + "/etc/cassandra/conf/.keystore");
     }
     
     public String getServerEncryptionKeystorePassword()
@@ -869,7 +869,7 @@ public class PriamConfiguration implements IConfiguration
 
     public String getServerEncryptionTruststore()
     {
-        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE, getCassHome() + "/conf/.truststore");
+        return config.get(CONFIG_SERVER_ENCRYPTION_TRUSTSTORE, getCassHome() + "/etc/cassandra/conf/.truststore");
     }
 
     public String getServerEncryptionTruststorePassword()
@@ -879,7 +879,7 @@ public class PriamConfiguration implements IConfiguration
 
     public String getServerEncryptionRequireClientAuth()
     {
-        return config.get(CONFIG_SERVER_ENCRYPTION_REQUIRE_CLIENT_AUTH, "false");
+        return config.get(CONFIG_SERVER_ENCRYPTION_REQUIRE_CLIENT_AUTH, "true");
     }
 
     public boolean isDynamicSnitchEnabled()
