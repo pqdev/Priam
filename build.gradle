@@ -1,5 +1,12 @@
 // Establish version and status
+
+allprojects {
 ext.githubProjectName = 'Priam'
+ext.major = System.env.MAJOR == null ? '2' : System.env.MAJOR
+ext.minor = System.env.MINOR == null ? '2' : System.env.MINOR
+ext.build = System.env.BUILD_NUMBER == null ? '0' : System.env.BUILD_NUMBER
+version = String.format("%s.%s.%s", ext.major, ext.minor, ext.build)
+}
 
 buildscript {
     repositories {
